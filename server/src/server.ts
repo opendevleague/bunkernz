@@ -1,16 +1,57 @@
 import express, { Application, Request, Response } from "express";
+import path from "path";
+import fs from "fs";
+import util from "util";
 
-const app: Application = express();
-const PORT: any = process.env.PORT || 3001;
+const readDir = util.promisify(fs.readdir);
+const fileStat = util.promisify(fs.stat);
 
-app.use(express.json());
+class Server {
+    
+    private readonly app: Application = express();
 
+    /**
+     * @param directory The input directory.
+     * @returns Array of all files and subfiles within the directory.
+     */
+    private static async getAllFolderFiles(directory: string): Promise<string[]> {
+        let files = await  readDir(directory);
 
+        let result: Promise<string[]>[] = Array.prototype.concat(...files.map(async file => {
+            file = path.join(directory,file);
+            const stat: fs.Stats = await fileStat(file);
 
-app.get("/", (req: Request, res: Response): void => {
-  res.send("YAY!!");
-});
+            return stat.isDirectory() ? await Server.getAllFolderFiles(file) : [file]
+        }));
 
+        return Array.prototype.concat(...(await Promise.all(result)));
+    }
 
+    public constructor() {
+        this.routing();
+    }
 
-app.listen(PORT, () => console.log(`Server is up and running on port: ${PORT}`))
+    public start(port: number) {
+        this.app.listen(port, () => console.log(`Server listening on 0.0.0.0:${port}`));
+        return this;
+    }
+
+    private async routing() {
+        // Configure app.
+        this.app.use(express.json());
+
+        // Static serving.
+        const staticPath = path.join(__dirname, "../../client/public");
+        this.app.use(express.static(staticPath));
+
+        // Import all API routes.
+        const routesPath = path.join(__dirname, "routes");
+        const routes: string[] = await Server.getAllFolderFiles(routesPath);
+        routes.forEach((file) => {
+            this.app.use(require(file));
+        });
+    }
+}
+
+const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+const server = new Server().start(port);
