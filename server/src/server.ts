@@ -41,7 +41,7 @@ class Server {
         this.app.use(express.json());
 
         // Static serving.
-        const staticPath = path.join(__dirname, "../../client/public");
+        const staticPath = path.join(__dirname, "../../client/dist");
         this.app.use(express.static(staticPath));
 
         // Import all API routes.
