@@ -1,7 +1,7 @@
 module.exports = {
-  map: false,
-  plugins: {
-    'postcss-import': {},
-    'postcss-preset-env': {},
-  }
+    map: false,
+    plugins: {
+        'postcss-import': {},
+        'postcss-preset-env': {},
+    }
 }
