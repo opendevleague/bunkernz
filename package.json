@@ -12,7 +12,7 @@
   "license": "MIT",
   "husky": {
     "hooks": {
-      "pre-commit": "eslint \"client/**/*.ts\" \"server/**/*.ts\" \"shared/**/*.ts\" \"build/**/*.ts\""
+      "pre-commit": "eslint \"client/**/*.ts\" \"server/**/*.ts\" \"build/**/*.ts\""
     }
   },
   "devDependencies": {
