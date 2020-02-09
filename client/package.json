@@ -50,5 +50,7 @@
         "webpack-cli": "^3.3.10",
         "webpack-dev-server": "^3.10.1"
     },
-    "dependencies": {}
+    "dependencies": {
+        "pixi.js": "^5.2.1"
+    }
 }
