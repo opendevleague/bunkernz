@@ -5,15 +5,15 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const devServerConf = {
-    contentBase: 'src',
+const devServer = {
+    contentBase: "src",
     compress: true,
-    port: 3000,
+    port: 3001,
     open: true,
     watchContentBase: true,
     hot: true,
     quiet: true,
-    clientLogLevel: 'silent'
+    clientLogLevel: "silent"
 };
 
 const rules = [
@@ -48,31 +48,37 @@ const rules = [
     }
 ];
 
+const CopyPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+
+};
 
 const plugins = [
     new CleanWebpackPlugin({
         cleanStaleWebpackAssets: false,
     }),
     new HtmlWebpackPlugin({
-        template: "./public/index.html",
-        favicon: "./public/favicon.ico"
+        template: "./src/html/index.html",
     }),
     new MiniCssExtractPlugin(),
-    // new FriendlyErrorsWebpackPlugin(),
+    new CopyPlugin([
+        { from: './src/media', to: 'media' },
+    ]),
 ];
 
 const config = {
     mode: "development",
-    entry: "./src/index.ts",
+    entry: "./src/code/index.ts",
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "bundle.js",
     },
     module: {
-        rules: rules
+        rules
     },
-    plugins: plugins,
-    devServer: devServerConf,
+    plugins,
+    devServer,
     resolve: {
         extensions: [
             ".tsx",
