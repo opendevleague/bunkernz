@@ -1,26 +1,28 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "strict": true,
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "downlevelIteration": true,
-    "resolveJsonModule": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "client/src/code",
-      "server/src",
-      "types"
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "strict": true,
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "downlevelIteration": true,
+        "resolveJsonModule": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "client/src/code",
+            "server/src",
+            "types"
+        ]
+    },
+    "include": [
+        ".eslintrc.js",
+        "postcss.config.js",
+        "client/**/*.ts",
+        "server/**/*.ts",
+        "shared/**/*.ts",
+        "build/**/*.ts",
+        "types/**/*.ts"
     ]
-  },
-  "include": [
-    "client/**/*.ts",
-    "server/**/*.ts",
-    "shared/**/*.ts",
-    "build/**/*.ts",
-    "types/**/*.ts"
-  ]
 }

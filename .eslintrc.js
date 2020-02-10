@@ -19,7 +19,7 @@ module.exports = {
             },
         },
         {
-            files: ["*.config.*", "server/**/*", "build/**/*"],
+            files: [".*rc.js", "*.config.*", "server/**/*", "build/**/*"],
             env: {
                 node: true,
             },
