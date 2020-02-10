@@ -9,51 +9,51 @@ import clientConfig from "../client/webpack.config";
 const clientDevServerConfig = clientConfig.devServer || {};
 
 const server = webpack({
-  mode: "development",
-  ...serverConfig,
+    mode: "development",
+    ...serverConfig,
 });
 
 server.hooks.watchRun.tap("notice", () => {
-  console.log("Rebuilding server...");
+    console.log("Rebuilding server...");
 });
 server.hooks.afterEmit.tap("notice", () => {
-  console.log("Server ready.");
+    console.log("Server ready.");
 });
 
 let cp: ChildProcess;
 server.watch({}, err => {
-  if (err) {
-    console.log(err);
-    return;
-  }
+    if (err) {
+        console.log(err);
+        return;
+    }
 
-  if (cp) cp.kill();
-  cp = fork("./dist/server/main.js");
+    if (cp) cp.kill();
+    cp = fork("./dist/server/main.js");
 });
 
 const client = webpack({
-  mode: "development",
-  ...clientConfig,
+    mode: "development",
+    ...clientConfig,
 });
 
 client.hooks.watchRun.tap("notice", () => {
-  console.log("Rebuilding client...");
+    console.log("Rebuilding client...");
 });
 
 client.hooks.afterEmit.tap("notice", () => {
-  console.log("Client ready.");
+    console.log("Client ready.");
 });
 
 const clientWatch = new WebpackDevServer(client, {
-  ...clientDevServerConfig,
-  noInfo: true,
-  stats: {
-    children: false,
-    modules: false,
-  },
+    ...clientDevServerConfig,
+    noInfo: true,
+    stats: {
+        children: false,
+        modules: false,
+    },
 });
 
 const { host, port } = buildConfig.client.devServer;
 clientWatch.listen(port, host, () => {
-  console.log(`Client will be available at http://${host}:${port}`);
+    console.log(`Client will be available at http://${host}:${port}`);
 });
