@@ -4,17 +4,22 @@ module.exports = {
     project: "./tsconfig.json",
   },
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "prettier"],
   env: {
-    browser: true,
     es6: true,
   },
-  globals: {
-    SERVER_PORT: false,
+  rules: {
+    "prettier/prettier": "error",
   },
   overrides: [
     {
-      files: ["*.config.*", "server/**/*"],
+      files: ["client/**/*"],
+      env: {
+        browser: true,
+      },
+    },
+    {
+      files: ["*.config.*", "server/**/*", "build/**/*"],
       env: {
         node: true,
       },
