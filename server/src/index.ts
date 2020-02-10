@@ -1,8 +1,9 @@
 import { Server } from "ws";
+import buildConfig from "../../build/config.json";
 
 const wss = new Server({
-  host: "0.0.0.0",
-  port: SERVER_PORT,
+  host: buildConfig.server.listenHost,
+  port: buildConfig.server.listenPort,
 });
 
 wss.on("connection", () => {

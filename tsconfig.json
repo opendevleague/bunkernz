@@ -8,7 +8,8 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
-    "typeRoots": ["node_modules/@types", "client/src", "server/src", "types"]
+    "resolveJsonModule": true,
+    "typeRoots": ["node_modules/@types", "client/src/code", "server/src", "types"]
   },
   "include": [
     "client/**/*",
