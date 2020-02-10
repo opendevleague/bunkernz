@@ -9,13 +9,18 @@
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "resolveJsonModule": true,
-    "typeRoots": ["node_modules/@types", "client/src/code", "server/src", "types"]
+    "typeRoots": [
+      "node_modules/@types",
+      "client/src/code",
+      "server/src",
+      "types"
+    ]
   },
   "include": [
-    "client/**/*",
-    "server/**/*",
-    "shared/**/*",
-    "build/**/*",
-    "types/**/*"
+    "client/**/*.ts",
+    "server/**/*.ts",
+    "shared/**/*.ts",
+    "build/**/*.ts",
+    "types/**/*.ts"
   ]
 }
