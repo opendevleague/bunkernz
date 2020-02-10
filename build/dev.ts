@@ -39,6 +39,7 @@ const client = webpack({
 client.hooks.watchRun.tap("notice", () => {
   console.log("Rebuilding client...");
 });
+
 client.hooks.afterEmit.tap("notice", () => {
   console.log("Client ready.");
 });
@@ -46,14 +47,6 @@ client.hooks.afterEmit.tap("notice", () => {
 const clientWatch = new WebpackDevServer(client, {
   ...clientDevServerConfig,
   noInfo: true,
-  // before: (app, devServer, compiler) => {
-  //   compiler.hooks.watchRun.tap("notice", () => {
-  //     console.log("Rebuilding client...");
-  //   });
-  //   compiler.hooks.afterEmit.tap("notice", () => {
-  //     console.log("Client ready.");
-  //   });
-  // },
   stats: {
     children: false,
     modules: false,
