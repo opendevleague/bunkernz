@@ -7,6 +7,8 @@ import buildConfig from "../../build/config.json";
 import { Collider } from "../../shared/components/Collider";
 import { Physics } from "../../shared/systems/Physics";
 import { Transform } from "../../shared/components/Transform";
+import { Renderer } from "../../shared/systems/Renderer";
+import { Sprite } from "pixi.js";
 
 class Server {
 
