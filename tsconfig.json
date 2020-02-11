@@ -1,10 +1,7 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "lib": [
-            "DOM",
-            "ES2017"
-        ],
+        "lib": ["DOM", "ES2017"],
         "module": "commonjs",
         "strict": true,
         "sourceMap": true,
@@ -13,12 +10,7 @@
         "experimentalDecorators": true,
         "downlevelIteration": true,
         "resolveJsonModule": true,
-        "typeRoots": [
-            "node_modules/@types",
-            "client/src/code",
-            "server/src",
-            "types"
-        ]
+        "typeRoots": ["node_modules/@types", "types"]
     },
     "include": [
         ".eslintrc.js",

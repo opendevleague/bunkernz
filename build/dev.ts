@@ -2,7 +2,7 @@ import { fork, ChildProcess } from "child_process";
 import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 
-import buildConfig from "./config.json";
+import buildConfig from "./config";
 import serverConfig from "../server/webpack.config";
 import clientConfig from "../client/webpack.config";
 

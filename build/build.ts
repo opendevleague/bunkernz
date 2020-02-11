@@ -17,9 +17,10 @@ const compiler = webpack([
 ]);
 
 compiler.apply(
-    new ProgressPlugin((percent, msg) => {
+    new ProgressPlugin((progress, msg) => {
         process.stdout.clearLine(0);
-        console.log(`${percent}%`, msg);
+        process.stdout.cursorTo(0);
+        process.stdout.write(`${Math.round(progress * 100)}% ${msg}`, "utf8");
     }),
 );
 

@@ -10,6 +10,7 @@ module.exports = {
     },
     rules: {
         "prettier/prettier": "error",
+        "no-dupe-class-members": "off", // false positive on overloads and TS catches it anyway
     },
     overrides: [
         {
@@ -19,7 +20,13 @@ module.exports = {
             },
         },
         {
-            files: [".*rc.js", "*.config.*", "server/**/*", "build/**/*"],
+            files: [
+                ".*rc.js",
+                "*.config.*",
+                "server/**/*",
+                "build/**/*",
+                "shared/**/*",
+            ],
             env: {
                 node: true,
             },
