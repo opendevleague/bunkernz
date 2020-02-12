@@ -13,7 +13,7 @@
     "license": "MIT",
     "husky": {
         "hooks": {
-            "pre-commit": "yarn lint --fix"
+            "pre-commit": "./node_modules/.bin/eslint \"./!(node_modules)/**/*.{js,ts}\" --fix"
         }
     },
     "devDependencies": {
