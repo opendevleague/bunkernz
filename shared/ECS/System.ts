@@ -1,14 +1,14 @@
-import { Component, Entity } from ".";
-
-export interface Entities {
-    [id: number]: Components
-}
+import { Component } from ".";
 
 export interface Components {
     [id: string]: Component
 }
 
-export class System {
+export interface Entities<TComponents extends Components> {
+    [id: number]: TComponents
+}
+
+export class System<TComponents extends Components> {
 
     /**
      * Global component reference array.
@@ -17,27 +17,22 @@ export class System {
     /**
      * System's entity-component dicionary.
      */
-    private readonly entities: Entities = {};
+    private readonly entities: Entities<TComponents> = {};
     /**
      * System's component type reference array.
      */
-    private readonly systemComponents: Components;
+    private readonly systemComponents: TComponents;
 
-    public constructor(systemComponents: Component[], globalComponents: Component[]) {
+    public constructor(systemComponents: TComponents, globalComponents: Component[]) {
         this.globalComponents = globalComponents;
-        this.systemComponents = {};
-
-        systemComponents.forEach(component => {
-            const componentName: string = component.constructor.name.toLowerCase();
-            this.systemComponents[componentName] = component;
-        });
+        this.systemComponents = systemComponents;
     }
 
     public addEntity(entity: number) {
         if (this.entities[entity] != null)
             return;
 
-        const components: Components = {};
+        const components: TComponents = {} as TComponents;
 
         // Make sure entity has required components; retrieve components.
         this.globalComponents.forEach(globalComponent => {
@@ -48,6 +43,7 @@ export class System {
                     return;
 
                 const componentName: string = globalComponent.constructor.name.toLowerCase();
+                //@ts-ignore
                 components[componentName] = globalComponent;
             });
         });
@@ -60,7 +56,7 @@ export class System {
     }
 
     public removeEntity(entity: number) {
-        const components: Components = this.entities[entity];
+        const components: TComponents = this.entities[entity];
 
         if (components == null)
             return;
@@ -83,16 +79,16 @@ export class System {
     /**
      * Called when the system starts.
      */
-    protected start(components: Components) { }
+    protected start(components: TComponents) { }
 
     /**
      * Called when the system stops.
      */
-    protected stop(components: Components) { }
+    protected stop(components: TComponents) { }
 
     /**
      * Called once every frame.
      * @param dt 
      */
-    protected update(components: Components, dt: number) { }
+    protected update(components: TComponents, dt: number) { }
 }

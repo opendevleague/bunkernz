@@ -34,10 +34,10 @@ class Server {
         const components: Component[] = [];
 
         const systems = {
-            physics: new Physics([
-                new Collider(),
-                new Transform()
-            ], components),
+            physics: new Physics({
+                collider: new Collider(),
+                transform: new Transform()
+            }, components),
         };
 
         const player = Entity.create([

@@ -5,9 +5,14 @@ import { Transform } from "./components/Transform";
 import { Renderer } from "./systems/Renderer";
 import { Sprite } from "./components/Sprite";
 
+type GameSystems = {
+    physics: Physics,
+    renderer: Renderer
+}
+
 export class Game {
 
-    public readonly systems: System[];
+    public readonly systems: GameSystems = {} as GameSystems;
     public readonly components: Component[] = [];
 
     private deltaTime: number = 0;
@@ -17,12 +22,10 @@ export class Game {
     //}
 
     public constructor() {
-        this.systems = [
-            new Physics([
-                <Collider>{},
-                <Transform>{}
-            ], this.components)
-        ];
+        this.systems.physics = new Physics({
+            collider: new Collider(),
+            transform: new Transform()
+        }, this.components)
     }
 
     public addPlayer(spriteSource: string): number {
@@ -32,8 +35,8 @@ export class Game {
             <Sprite>{ source: spriteSource }
         ], this.components);
 
-        this.systems.find(x => x.constructor === Physics)?.addEntity(player);
-        this.systems.find(x => x.constructor === Renderer)?.addEntity(player);
+        this.systems.physics?.addEntity(player);
+        this.systems.renderer?.addEntity(player);
         return player;
     }
 
@@ -41,7 +44,8 @@ export class Game {
         while (true) {
             const time: number = Date.now() / 1000;
 
-            this.systems.forEach(system => {
+            Object.keys(this.systems).forEach(key => {
+                const system = this.systems[key as keyof GameSystems];
                 system.loop(time)
             });
 

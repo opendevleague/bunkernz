@@ -38,13 +38,13 @@ export class Canvas extends EventEmitter {
     }
 
     /**
-     * Adds the renderer system to the game.
+     * Sets the renderer system to the game.
      */
     private addRendererSystem() {
-        this.game.systems.push(new Renderer([
-            new Transform(),
-            new Sprite()
-        ], this.game.components, this.app));
+        this.game.systems.renderer = new Renderer({
+            transform: new Transform(),
+            sprite: new Sprite()
+        }, this.game.components, this.app);
     }
 
     private windowEvents() {
