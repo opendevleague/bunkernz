@@ -1,7 +1,11 @@
 import { Component, Entity } from ".";
 
-export type Entities = {
-    [id: number]: Component[]
+export interface Entities {
+    [id: number]: Components
+}
+
+export interface Components {
+    [id: string]: Component
 }
 
 export class System {
@@ -11,72 +15,58 @@ export class System {
      */
     private readonly globalComponents: Component[];
     /**
-     * System active component array.
+     * System's entity-component dicionary.
      */
-    private readonly components: Component[] = [];
+    private readonly entities: Entities = {};
     /**
-     * System component type reference array.
+     * System's component type reference array.
      */
-    private readonly systemComponents: Component[];
-
-
-    /**
-     * Active entities array.
-     */
-    public get entities(): number[] {
-        const value: number[] = [];
-
-        this.components.forEach(component => {
-            if (value.includes(component.entity))
-                return;
-
-            value.push(component.entity);
-        });
-
-        return value;
-    }
+    private readonly systemComponents: Components;
 
     public constructor(systemComponents: Component[], globalComponents: Component[]) {
         this.globalComponents = globalComponents;
-        this.systemComponents = systemComponents;
+        this.systemComponents = {};
+
+        systemComponents.forEach(component => {
+            const componentName: string = component.constructor.name.toLowerCase();
+            this.systemComponents[componentName] = component;
+        });
     }
 
     public addEntity(entity: number) {
         if (this.entities[entity] != null)
             return;
 
-        const components: Component[] = [];
+        const components: Components = {};
 
         // Make sure entity has required components; retrieve components.
         this.globalComponents.forEach(globalComponent => {
-            this.systemComponents.forEach(systemComponent => {
+            Object.keys(this.systemComponents).forEach(key => {
+                const systemComponent = this.systemComponents[key];
+
                 if (globalComponent.constructor !== systemComponent.constructor)
                     return;
 
-                components.push(globalComponent);
+                const componentName: string = globalComponent.constructor.name.toLowerCase();
+                components[componentName] = globalComponent;
             });
         });
 
-        if (components.length < this.systemComponents.length)
+        if (Object.keys(components).length < Object.keys(this.systemComponents).length)
             throw new Error(`Entity ${entity} does not have all required components by system "${this.constructor.name}"`)
 
-        components.forEach(component => {
-            this.components.push(component);
-        });
-
+        this.entities[entity] = components;
         this.start(components);
     }
 
     public removeEntity(entity: number) {
-        const components: Component[] = Entity.getComponents(entity, this.globalComponents);
+        const components: Components = this.entities[entity];
+
+        if (components == null)
+            return;
 
         this.stop(components);
-
-        // Remove components.
-        components.forEach(component => {
-            const i = this.components.indexOf(component);
-            this.components.splice(i, 1);
-        });
+        delete this.entities[entity];
     }
 
     /**
@@ -84,11 +74,8 @@ export class System {
      * @param dt 
      */
     public loop(dt: number) {
-        const entities = this.entities;
-        //console.log("@ loop, entities: ", entities);
-
-        this.entities.forEach(entity => {
-            const components = Entity.getComponents(entity, this.globalComponents);
+        Object.keys(this.entities).forEach(key => {
+            const components = this.entities[parseInt(key)];
             this.update(components, dt);
         });
     }
@@ -96,16 +83,16 @@ export class System {
     /**
      * Called when the system starts.
      */
-    protected start(components: Component[]) { }
+    protected start(components: Components) { }
 
     /**
      * Called when the system stops.
      */
-    protected stop(components: Component[]) { }
+    protected stop(components: Components) { }
 
     /**
      * Called once every frame.
      * @param dt 
      */
-    protected update(components: Component[], dt: number) { }
+    protected update(components: Components, dt: number) { }
 }

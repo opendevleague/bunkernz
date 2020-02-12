@@ -19,8 +19,8 @@ export class Game {
     public constructor() {
         this.systems = [
             new Physics([
-                new Collider(),
-                new Transform()
+                <Collider>{},
+                <Transform>{}
             ], this.components)
         ];
     }
@@ -29,7 +29,7 @@ export class Game {
         const player: number = Entity.create([
             new Collider(),
             new Transform(),
-            new Sprite(spriteSource)
+            <Sprite>{ source: spriteSource }
         ], this.components);
 
         this.systems.find(x => x.constructor === Physics)?.addEntity(player);

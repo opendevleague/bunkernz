@@ -1,12 +1,9 @@
 import { Component } from "../ECS";
 
+/**
+ * Used to render a sprite.
+ */
 export class Sprite extends Component {
 
-    public source?: string;
-
-    public constructor(source?: string) {
-        super();
-
-        this.source = source;
-    }
+    public source!: string;
 }
