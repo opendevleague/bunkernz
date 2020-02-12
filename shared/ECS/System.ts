@@ -44,10 +44,8 @@ export abstract class System {
             if (this.requiredComponents[componentName] == null)
                 return;
 
-            //@ts-ignore
             // Add component to registered entity.
             componentsToAdd[componentName] = component;
-
         });
 
         this.entities[entity] = componentsToAdd;
