@@ -1,4 +1,4 @@
-import { Entity, Component, System } from "./ECS";
+import Ecs, { Entity, Component, System } from "./ECS";
 import { Physics } from "./systems/Physics";
 import { Collider } from "./components/Collider";
 import { Transform } from "./components/Transform";
@@ -12,9 +12,7 @@ type GameSystems = {
 
 export class Game {
 
-    public readonly systems: GameSystems = {} as GameSystems;
-    public readonly components: Component[] = [];
-
+    private ecs: Ecs;
     private deltaTime: number = 0;
 
     //public getSystem<TSystem extends System>(): System | undefined {
@@ -22,32 +20,27 @@ export class Game {
     //}
 
     public constructor() {
-        this.systems.physics = new Physics({
+        this.ecs = new Ecs();
+
+        this.ecs.addSystem(new Physics({
             collider: new Collider(),
             transform: new Transform()
-        }, this.components)
-    }
+        }));
 
-    public addPlayer(spriteSource: string): number {
-        const player: number = Entity.create([
+        this.ecs.createEntity([
             new Collider(),
             new Transform(),
-            <Sprite>{ source: spriteSource }
-        ], this.components);
+            <Sprite>{ source: "./some/path" }
+        ]);
 
-        this.systems.physics?.addEntity(player);
-        this.systems.renderer?.addEntity(player);
-        return player;
+        console.log('Game started');
     }
 
     public async loop() {
         while (true) {
             const time: number = Date.now() / 1000;
 
-            Object.keys(this.systems).forEach(key => {
-                const system = this.systems[key as keyof GameSystems];
-                system.loop(time)
-            });
+            this.ecs.loop(this.deltaTime);
 
             this.deltaTime = (Date.now() / 1000) - time;
 

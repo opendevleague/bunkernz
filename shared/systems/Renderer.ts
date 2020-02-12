@@ -3,30 +3,25 @@ import { Components } from "../ECS/System";
 import { Sprite } from "../components/Sprite";
 import { Transform } from "../components/Transform";
 
-export interface RendererComponents extends Components {
-    sprite: Sprite,
-    transform: Transform
-}
-
-export class Renderer extends System<RendererComponents> {
+export class Renderer extends System {
 
     public app: PIXI.Application;
 
-    public constructor(components: RendererComponents, globalComponents: Component[], app: PIXI.Application) {
-        super(components, globalComponents);
+    public constructor(components: Components, app: PIXI.Application) {
+        super(components);
         this.app = app;
     }
 
-    protected start(components: RendererComponents) {
+    protected start(components: Components) {
         console.log('started renderer system, components: ', components);
         //this.app.stage.addChild()
     }
 
-    protected stop(components: RendererComponents) {
+    protected stop(components: Components) {
         console.log('stopped renderer system');
     }
 
-    protected update(components: RendererComponents, dt: number) {
+    protected update(components: Components, dt: number) {
 
     }
 }

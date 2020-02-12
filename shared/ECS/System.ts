@@ -4,59 +4,58 @@ export interface Components {
     [id: string]: Component
 }
 
-export interface Entities<TComponents extends Components> {
-    [id: number]: TComponents
+export interface SystemEntities {
+    [id: number]: Components
 }
 
-export class System<TComponents extends Components> {
+export abstract class System {
 
-    /**
-     * Global component reference array.
-     */
-    private readonly globalComponents: Component[];
     /**
      * System's entity-component dicionary.
      */
-    private readonly entities: Entities<TComponents> = {};
+    private readonly entities: SystemEntities = {};
     /**
-     * System's component type reference array.
+     * System's required components array.
      */
-    private readonly systemComponents: TComponents;
+    private readonly requiredComponents: Components;
 
-    public constructor(systemComponents: TComponents, globalComponents: Component[]) {
-        this.globalComponents = globalComponents;
-        this.systemComponents = systemComponents;
+    public constructor(requiredComponents: Components) {
+        this.requiredComponents = requiredComponents;
     }
 
-    public addEntity(entity: number) {
+    public registerEntity(entity: number, components: Component[]) {
         if (this.entities[entity] != null)
             return;
 
-        const components: TComponents = {} as TComponents;
+        const componentsToAdd: Components = {};
 
-        // Make sure entity has required components; retrieve components.
-        this.globalComponents.forEach(globalComponent => {
-            Object.keys(this.systemComponents).forEach(key => {
-                const systemComponent = this.systemComponents[key];
+        Object.keys(this.requiredComponents).forEach(key => {
+            const requiredComponent = this.requiredComponents[key];
+            const componentName: string = requiredComponent.constructor.name.toLowerCase();
+            const component = components.find(x => x.constructor.name.toLowerCase() === componentName);
 
-                if (globalComponent.constructor !== systemComponent.constructor)
-                    return;
+            if (component == null)
+                throw new Error(`Entity ${entity} does not have the required component "${requiredComponent.constructor.name}" by system "${this.constructor.name}"`);
 
-                const componentName: string = globalComponent.constructor.name.toLowerCase();
-                //@ts-ignore
-                components[componentName] = globalComponent;
-            });
+            if (component.entity != entity)
+                throw new Error("Component(s) from multiple entities passed to System.addEntity");
+
+            // Abort if component does not belong to this sytem.
+            if (this.requiredComponents[componentName] == null)
+                return;
+
+            //@ts-ignore
+            // Add component to registered entity.
+            componentsToAdd[componentName] = component;
+
         });
 
-        if (Object.keys(components).length < Object.keys(this.systemComponents).length)
-            throw new Error(`Entity ${entity} does not have all required components by system "${this.constructor.name}"`)
-
-        this.entities[entity] = components;
-        this.start(components);
+        this.entities[entity] = componentsToAdd;
+        this.start(this.entities[entity]);
     }
 
     public removeEntity(entity: number) {
-        const components: TComponents = this.entities[entity];
+        const components: Components = this.entities[entity];
 
         if (components == null)
             return;
@@ -79,16 +78,16 @@ export class System<TComponents extends Components> {
     /**
      * Called when the system starts.
      */
-    protected start(components: TComponents) { }
+    protected start(components: Components) { }
 
     /**
      * Called when the system stops.
      */
-    protected stop(components: TComponents) { }
+    protected stop(components: Components) { }
 
     /**
      * Called once every frame.
      * @param dt 
      */
-    protected update(components: TComponents, dt: number) { }
+    protected update(components: Components, dt: number) { }
 }
