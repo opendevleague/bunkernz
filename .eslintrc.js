@@ -13,13 +13,19 @@ module.exports = {
     },
     overrides: [
         {
-            files: ["client/**/*"],
+            files: ["client/**/*", "shared/**/*"],
             env: {
                 browser: true,
             },
         },
         {
-            files: [".*rc.js", "*.config.*", "server/**/*", "build/**/*"],
+            files: [
+                ".*rc.js",
+                "*.config.*",
+                "server/**/*",
+                "build/**/*",
+                "shared/**/*",
+            ],
             env: {
                 node: true,
             },
