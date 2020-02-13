@@ -3,16 +3,15 @@ import { Component } from "./Component";
 import { System, Components } from "./System";
 
 export class Ecs {
-
     public entities: Entities = {};
     public systems: System[] = [];
 
-    public get entity_count(): number {
+    public get entityCount(): number {
         return Object.keys(this.entities).length;
     }
 
     public createEntity(components: Component[]): number {
-        const entity = this.entity_count;
+        const entity = this.entityCount;
         this.entities[entity] = components;
 
         components.forEach(component => {

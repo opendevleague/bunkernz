@@ -3,14 +3,18 @@ import { Renderer } from "../../../shared/systems/Renderer";
 import { Transform } from "../../../shared/components/Transform";
 import { Sprite } from "../../../shared/components/Sprite";
 import { EventEmitter } from "events";
+import PIXI from "pixi.js";
 
 /**
  * Responsible for managing PIXI
  */
 export class Canvas extends EventEmitter {
-
-    private root: HTMLDivElement = document.getElementById("root") as HTMLDivElement;
-    private canvas: HTMLCanvasElement = document.getElementById("view") as HTMLCanvasElement;
+    private root: HTMLDivElement = document.getElementById(
+        "root",
+    ) as HTMLDivElement;
+    private canvas: HTMLCanvasElement = document.getElementById(
+        "view",
+    ) as HTMLCanvasElement;
     private game: Game;
     public app: PIXI.Application;
 

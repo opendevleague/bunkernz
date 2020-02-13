@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import util from "util";
 import * as ws from "ws";
-import Ecs, { Entity, Component, System } from "../../shared/ECS";
+import Ecs, { Entity, Component, System } from "../../shared/ecs";
 import buildConfig from "../../build/config.json";
 import { Collider } from "../../shared/components/Collider";
 import { Physics } from "../../shared/systems/Physics";
@@ -12,7 +12,6 @@ import { Sprite } from "pixi.js";
 import { Game } from "../../shared/Game";
 
 class Server {
-
     private readonly socket: ws.Server;
     private readonly game: Game;
 

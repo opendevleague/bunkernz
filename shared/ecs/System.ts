@@ -1,15 +1,14 @@
 import { Component } from ".";
 
 export interface Components {
-    [id: string]: Component
+    [id: string]: Component;
 }
 
 export interface SystemEntities {
-    [id: number]: Components
+    [id: number]: Components;
 }
 
 export abstract class System {
-
     /**
      * System's entity-component dicionary.
      */
@@ -23,42 +22,43 @@ export abstract class System {
         this.requiredComponents = requiredComponents;
     }
 
-    public registerEntity(entity: number, components: Component[]) {
-        if (this.entities[entity] != null)
-            return;
+    public registerEntity(entity: number, components: Component[]): void {
+        if (this.entities[entity] != null) return;
 
         const componentsToAdd: Components = {};
 
         Object.keys(this.requiredComponents).forEach(key => {
             const requiredComponent = this.requiredComponents[key];
             const componentName: string = requiredComponent.constructor.name.toLowerCase();
-            const component = components.find(x => x.constructor.name.toLowerCase() === componentName);
+            const component = components.find(
+                x => x.constructor.name.toLowerCase() === componentName,
+            );
 
             if (component == null)
-                throw new Error(`Entity ${entity} does not have the required component "${requiredComponent.constructor.name}" by system "${this.constructor.name}"`);
+                throw new Error(
+                    `Entity ${entity} does not have the required component "${requiredComponent.constructor.name}" by system "${this.constructor.name}"`,
+                );
 
             if (component.entity != entity)
-                throw new Error("Component(s) from multiple entities passed to System.addEntity");
+                throw new Error(
+                    "Component(s) from multiple entities passed to System.addEntity",
+                );
 
             // Abort if component does not belong to this sytem.
-            if (this.requiredComponents[componentName] == null)
-                return;
+            if (this.requiredComponents[componentName] == null) return;
 
-            //@ts-ignore
             // Add component to registered entity.
             componentsToAdd[componentName] = component;
-
         });
 
         this.entities[entity] = componentsToAdd;
         this.start(this.entities[entity]);
     }
 
-    public removeEntity(entity: number) {
+    public removeEntity(entity: number): void {
         const components: Components = this.entities[entity];
 
-        if (components == null)
-            return;
+        if (components == null) return;
 
         this.stop(components);
         delete this.entities[entity];
@@ -66,9 +66,9 @@ export abstract class System {
 
     /**
      * Called once every frame by the main game loop.
-     * @param dt 
+     * @param dt
      */
-    public loop(dt: number) {
+    public loop(dt: number): void {
         Object.keys(this.entities).forEach(key => {
             const components = this.entities[parseInt(key)];
             this.update(components, dt);
@@ -78,16 +78,22 @@ export abstract class System {
     /**
      * Called when the system starts.
      */
-    protected start(components: Components) { }
+    protected start(components: Components): void {
+        // Override
+    }
 
     /**
      * Called when the system stops.
      */
-    protected stop(components: Components) { }
+    protected stop(components: Components): void {
+        // Override
+    }
 
     /**
      * Called once every frame.
-     * @param dt 
+     * @param dt
      */
-    protected update(components: Components, dt: number) { }
+    protected update(components: Components, dt: number): void {
+        // Override
+    }
 }

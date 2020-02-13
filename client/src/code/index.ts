@@ -7,7 +7,6 @@ import { Renderer } from "../../../shared/systems/Renderer";
 import * as PlayerSprite from "../media/assets/bunny.png";
 
 class Client {
-
     private canvas: Canvas;
     private game: Game;
 
