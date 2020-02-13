@@ -37,20 +37,20 @@ export class Game {
         console.log("Game started");
     }
 
-    public async loop() {
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-            const time: number = Date.now() / 1000;
+    public start(): void {
+        let lastTime = performance.now(),
+            currentTime;
 
-            this.ecs.loop(this.deltaTime);
+        setInterval(
+            () => {
+                currentTime = performance.now();
+                this.deltaTime = (currentTime - lastTime) / 1000;
 
-            this.deltaTime = Date.now() / 1000 - time;
+                this.ecs.loop(this.deltaTime);
 
-            // Limit FPS to 60
-            if (1 / this.deltaTime > 60)
-                await new Promise(resolve =>
-                    setTimeout(resolve, (1 / 60) * 1000),
-                );
-        }
+                lastTime = currentTime;
+            },
+            1000 / 60, // 60Hz
+        );
     }
 }
