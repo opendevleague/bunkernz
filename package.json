@@ -1,6 +1,6 @@
 {
-    "name": "failedgameprototype",
-    "version": "1.0.0",
+    "name": "bunkernz",
+    "version": "0.0.1",
     "description": "Community game",
     "scripts": {
         "build": "ts-node build/build.ts",
