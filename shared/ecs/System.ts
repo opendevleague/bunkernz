@@ -1,4 +1,5 @@
-import { Component } from ".";
+import { Component } from "./Component";
+import { Entity } from "./Entity";
 
 export interface Components {
     [id: string]: Component;
@@ -12,31 +13,35 @@ export abstract class System {
     /**
      * System's entity-component dicionary.
      */
-    private readonly entities: SystemEntities = {};
+    protected readonly entities: SystemEntities = {};
     /**
      * System's required components array.
      */
-    private readonly requiredComponents: Components;
+    protected readonly requiredComponents: typeof Component[] = [];
 
-    public constructor(requiredComponents: Components) {
-        this.requiredComponents = requiredComponents;
+    protected getComponent<T extends typeof Component>(
+        entity: Entity,
+        type: T,
+    ): InstanceType<T> {
+        const typeName = type.name.toLowerCase();
+
+        return this.entities[entity][typeName] as InstanceType<T>;
     }
 
-    public registerEntity(entity: number, components: Component[]): void {
+    public registerEntity(entity: Entity, components: Component[]): void {
         if (this.entities[entity] != null) return;
 
         const componentsToAdd: Components = {};
 
-        Object.keys(this.requiredComponents).forEach(key => {
-            const requiredComponent = this.requiredComponents[key];
-            const componentName: string = requiredComponent.constructor.name.toLowerCase();
+        this.requiredComponents.forEach(requiredComponent => {
+            const componentName: string = requiredComponent.name.toLowerCase();
             const component = components.find(
-                x => x.constructor.name.toLowerCase() === componentName,
+                x => x.constructor.name === requiredComponent.name,
             );
 
             if (component == null)
                 throw new Error(
-                    `Entity ${entity} does not have the required component "${requiredComponent.constructor.name}" by system "${this.constructor.name}"`,
+                    `Entity ${entity} does not have the required component "${requiredComponent.name}" by system "${this.constructor.name}"`,
                 );
 
             if (component.entity != entity)
@@ -44,23 +49,16 @@ export abstract class System {
                     "Component(s) from multiple entities passed to System.addEntity",
                 );
 
-            // Abort if component does not belong to this sytem.
-            if (this.requiredComponents[componentName] == null) return;
-
             // Add component to registered entity.
             componentsToAdd[componentName] = component;
         });
 
         this.entities[entity] = componentsToAdd;
-        this.start(this.entities[entity]);
+        this.start(entity);
     }
 
     public removeEntity(entity: number): void {
-        const components: Components = this.entities[entity];
-
-        if (components == null) return;
-
-        this.stop(components);
+        this.stop(entity);
         delete this.entities[entity];
     }
 
@@ -69,23 +67,22 @@ export abstract class System {
      * @param dt
      */
     public loop(dt: number): void {
-        Object.keys(this.entities).forEach(key => {
-            const components = this.entities[parseInt(key)];
-            this.update(components, dt);
+        Object.keys(this.entities).forEach(entity => {
+            this.update(+entity, dt);
         });
     }
 
     /**
      * Called when the system starts.
      */
-    protected start(components: Components): void {
+    protected start(entity: Entity): void {
         // Override
     }
 
     /**
      * Called when the system stops.
      */
-    protected stop(components: Components): void {
+    protected stop(entity: Entity): void {
         // Override
     }
 
@@ -93,7 +90,7 @@ export abstract class System {
      * Called once every frame.
      * @param dt
      */
-    protected update(components: Components, dt: number): void {
+    protected update(entity: Entity, dt: number): void {
         // Override
     }
 }

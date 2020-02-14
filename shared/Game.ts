@@ -10,32 +10,8 @@ type GameSystems = {
     renderer: Renderer;
 };
 
-export class Game {
-    private ecs: Ecs;
+export class Game extends Ecs {
     private deltaTime = 0;
-
-    //public getSystem<TSystem extends System>(): System | undefined {
-    //    return this.systems.find(x => typeof x == TSystem);
-    //}
-
-    public constructor() {
-        this.ecs = new Ecs();
-
-        this.ecs.addSystem(
-            new Physics({
-                collider: new Collider(),
-                transform: new Transform(),
-            }),
-        );
-
-        this.ecs.createEntity([
-            new Collider(),
-            new Transform(),
-            new Sprite("./some/path"),
-        ]);
-
-        console.log("Game started");
-    }
 
     public start(): void {
         let lastTime = performance.now(),
@@ -46,7 +22,7 @@ export class Game {
                 currentTime = performance.now();
                 this.deltaTime = (currentTime - lastTime) / 1000;
 
-                this.ecs.loop(this.deltaTime);
+                this.loop(this.deltaTime);
 
                 lastTime = currentTime;
             },

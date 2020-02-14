@@ -39,7 +39,7 @@ export class Ecs {
         return systemId;
     }
 
-    public loop(dt: number) {
+    public loop(dt: number): void {
         this.systems.forEach(system => {
             system.loop(dt);
         });

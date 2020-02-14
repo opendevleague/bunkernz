@@ -1,22 +1,18 @@
-import { System, Component } from "../ecs";
+import { System, Component, Entity } from "../ecs";
 import { Components } from "../ecs/System";
 import { Sprite } from "../components/Sprite";
 import { Transform } from "../components/Transform";
+import * as PIXI from "pixi.js";
 
 export class Renderer extends System {
-    public app: PIXI.Application;
+    public app?: PIXI.Application;
 
-    public constructor(components: Components, app: PIXI.Application) {
-        super(components);
-        this.app = app;
-    }
-
-    protected start(components: Components) {
-        console.log("started renderer system, components: ", components);
+    protected start(entity: Entity) {
+        console.log("started renderer system, components: ", entity);
         //this.app.stage.addChild()
     }
 
-    protected stop(components: Components) {
+    protected stop(entity: Entity) {
         console.log("stopped renderer system");
     }
 }
