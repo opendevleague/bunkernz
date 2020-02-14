@@ -27,6 +27,11 @@ export abstract class System {
         return this.entities[entity][typeName] as InstanceType<T>;
     }
 
+    protected log(text: string) {
+        const time = new Date().toLocaleTimeString();
+        console.log(`[${time}] [${this.constructor.name}]: ${text}`);
+    }
+
     public registerEntity(entity: Entity, components: Component[]): void {
         if (this.entities[entity] != null)
             return;

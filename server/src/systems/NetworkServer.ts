@@ -9,7 +9,7 @@ type OutgoingMessage = Record<string, any> | string;
 export default class NetworkServer extends System {
 
     private readonly server: Server;
-    private userCount = 0;
+    private baseId = 0;
     private users: Map<WebSocket, number> = new Map();
 
     protected get requiredComponents(): typeof Component[] {
@@ -49,9 +49,13 @@ export default class NetworkServer extends System {
     }
 
     private onNewClient(socket: WebSocket, request: IncomingMessage): void {
-        const userId = this.userCount++;
-        console.log("New connection. Total connections: " + this.users.entries.length);
-        this.users.set(socket, userId);
+        if (this.users.has(socket))
+            return;
+
+        const netId = this.baseId++;
+        this.users.set(socket, netId);
+        // Print message in green.
+        console.log("\x1b[32m", "Connection opened. Total connections: " + this.users.size, "\x1b[0m");
 
         socket.on("message", raw => {
             const data = JSON.parse(raw as string);
@@ -59,18 +63,21 @@ export default class NetworkServer extends System {
         });
 
         socket.on("close", () => {
+            this.users.delete(socket);
+            // Print message in red.
+            console.log("\x1b[31m", "Connection closed. Total connections: " + this.users.size, "\x1b[0m");
+
             this.broadcast(socket, {
                 type: "exit",
-                userId,
+                netId,
             });
         });
     }
 
-
     private onMessage(socket: WebSocket, data: any): void {
-        const userId = this.users.get(socket);
+        const netId = this.users.get(socket);
 
-        if (userId == null) {
+        if (netId == null) {
             console.log("User from the following socket could not be retrieved:", socket);
             return;
         }
@@ -79,7 +86,13 @@ export default class NetworkServer extends System {
             case "join":
                 this.broadcast(socket, {
                     type: "join",
-                    userId,
+                    position: data.position,
+                    netId,
+                });
+
+                this.send(socket, {
+                    type: "handshake",
+                    netId
                 });
 
                 this.server.clients.forEach(client => {
@@ -88,16 +101,18 @@ export default class NetworkServer extends System {
 
                     this.send(socket, {
                         type: "join",
-                        userId: this.users.get(client),
+                        position: data.position,
+                        netId: this.users.get(client),
                     });
                 });
                 break;
             case "move":
+                // TODO: Validate data.input & data.position.
+
                 this.broadcast(socket, {
                     type: "move",
-                    userId,
-                    x: data.x,
-                    y: data.y,
+                    netId,
+                    position: data.position
                 });
                 break;
         }

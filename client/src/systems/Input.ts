@@ -1,33 +1,36 @@
 import { System, Component, Entity } from "../../../shared/ecs";
-import ActionMap from "../components/ActionMap";
+import ActionMap, { KeyEvent } from "../components/Keyboard";
+import Keyboard from "../components/Keyboard";
 
-// export default class Input extends System {
+export default class Input extends System {
 
-//     private listeners: Record<string, Array<() => void>> = {};
+    private listeners: Record<string, Array<() => void>> = {};
 
-//     public constructor(actions: Record<string, string>) {
-//         super();
+    protected get requiredComponents(): typeof Component[] {
+        return [
+            Keyboard,
+        ];
+    }
 
-//         Object.entries(actions).forEach(([name, key]) => {
-//             this.listeners[name] = [];
+    public start(entity: Entity) {
+        const keyboard = this.getComponent(entity, Keyboard);
 
-//             document.addEventListener("keydown", ev => {
-//                 if (ev.key === key) {
-//                     this.listeners[name].forEach(callback => callback());
-//                 }
-//             });
-//         });
-//     }
+        document.addEventListener("keydown", e => {
+            const event = e as KeyEvent;
+            event.isDown = true;
+            keyboard.keys.push(event);
+        })
 
-//     public update(engine: Engine): void {
-//         engine.createdComponents().forEach(component => {
-//             if (component instanceof ActionMap && component.entity) {
-//                 const entity = component.entity;
+        document.addEventListener("keyup", e => {
+            const event = e as KeyEvent;
+            event.isDown = false;
+            keyboard.keys.push(event);
+        });
+    }
 
-//                 Object.entries(component.map).forEach(([name, callback]) => {
-//                     this.listeners[name].push(callback.bind(component, entity));
-//                 });
-//             }
-//         });
-//     }
-// }
+    public update(entity: Entity): void {
+        const keyboard = this.getComponent(entity, Keyboard);
+        // Clear array.
+        keyboard.keys = [];
+    }
+}

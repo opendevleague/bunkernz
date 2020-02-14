@@ -49,6 +49,10 @@ export class Vector2 {
         return lhs.x * rhs.x + lhs.y * rhs.y;
     }
 
+    public static equals(lhs: Vector2, rhs: Vector2): boolean {
+        return lhs.x === rhs.x && lhs.y == rhs.y;
+    }
+
     public constructor(other: Vector2);
     public constructor(x: number, y: number);
     public constructor(a: number | Vector2, b?: number) {
@@ -61,6 +65,13 @@ export class Vector2 {
         } else {
             throw new Error("Vector2 must be constructed with two parameters, or another Vector2.");
         }
+    }
+
+    public toPoint(): { x: number; y: number } {
+        return {
+            x: this.x,
+            y: this.y
+        };
     }
 
     public add(rhs: Vector2): void {

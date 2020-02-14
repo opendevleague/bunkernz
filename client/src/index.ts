@@ -4,13 +4,15 @@ import Renderer from "./systems/Renderer";
 import bunny from "../assets/img/bunny.png";
 import Sprite from "./components/Sprite";
 // import Input from "./systems/Input";
-import ActionMap from "./components/ActionMap";
 import NetworkClient from "./systems/NetworkClient";
 import NetworkedPlayer from "../../shared/components/NetworkedPlayer";
-import * as PIXI from "pixi.js";
 import { Game } from "../../shared/Game";
-import PlayerSprite from "../media/assets/bunny.png";
 import { Transform } from "../../shared/components/Transform";
+import Input from "./systems/Input";
+import Keyboard from "./components/Keyboard";
+import CharacterInput from "../../shared/components/CharacterInput";
+import CharacterController from "../../shared/systems/CharacterController";
+import CharacterTranslator from "./systems/input translators/CharacterTranslator";
 
 class Client extends Game {
 
@@ -26,44 +28,18 @@ class Client extends Game {
         };
 
         this.addSystem(new Renderer(this.canvas));
-        // this.addSystem(new Input({
-        //     up: "ArrowUp",
-        //     down: "ArrowDown",
-        //     left: "ArrowLeft",
-        //     right: "ArrowRight",
-        // }));
         this.addSystem(new NetworkClient(buildConfig.client.server, this));
+        this.addSystem(new CharacterController());
+        this.addSystem(new CharacterTranslator());
+        // The input system needs to be the last registered as it clears the Keyboard component on every frame.
+        this.addSystem(new Input());
 
         const localPlayer = this.createEntity([
             new NetworkedPlayer(true),
             new Transform(),
-            new Sprite(bunny),
-            // new ActionMap({
-            //     up: (entity): void => {
-            //         const position = entity.getComponent(Position);
-            //         if (!position) return;
-
-            //         position.y--;
-            //     },
-            //     down: (entity): void => {
-            //         const position = entity.getComponent(Position);
-            //         if (!position) return;
-
-            //         position.y++;
-            //     },
-            //     left: (entity): void => {
-            //         const position = entity.getComponent(Position);
-            //         if (!position) return;
-
-            //         position.x--;
-            //     },
-            //     right: (entity): void => {
-            //         const position = entity.getComponent(Position);
-            //         if (!position) return;
-
-            //         position.x++;
-            //     },
-            // }),
+            new Keyboard(),
+            new CharacterInput(),
+            new Sprite(bunny)
         ]);
 
         this.start();
