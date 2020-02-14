@@ -8,14 +8,23 @@ import Sprite from "./components/Sprite";
 import { Transform } from "../../../shared/components/Transform";
 
 class Client extends Game {
+
+    private canvas: HTMLCanvasElement;
+
     public constructor() {
         super();
 
+        this.canvas = document.getElementById("view") as HTMLCanvasElement;
+        this.canvas.oncontextmenu = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         this.addSystem(
-            new Renderer(document.getElementById("view") as HTMLCanvasElement),
+            new Renderer(this.canvas),
         );
 
-        this.createEntity([new Sprite(PlayerSprite), new Transform()]);
+        const player = this.createEntity([new Sprite(PlayerSprite), new Transform()]);
     }
 }
 

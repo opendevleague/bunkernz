@@ -2,13 +2,7 @@ import Ecs, { Entity, Component, System } from "./ecs";
 import { Physics } from "./systems/Physics";
 import { Collider } from "./components/Collider";
 import { Transform } from "./components/Transform";
-import { Renderer } from "./systems/Renderer";
 import { Sprite } from "./components/Sprite";
-
-type GameSystems = {
-    physics: Physics;
-    renderer: Renderer;
-};
 
 export class Game extends Ecs {
     private deltaTime = 0;

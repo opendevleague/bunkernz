@@ -1,14 +1,5 @@
-import path from "path";
-import fs from "fs";
-import util from "util";
 import * as ws from "ws";
-import Ecs, { Entity, Component, System } from "../../shared/ecs";
 import buildConfig from "../../build/config";
-import { Collider } from "../../shared/components/Collider";
-import { Physics } from "../../shared/systems/Physics";
-import { Transform } from "../../shared/components/Transform";
-import { Renderer } from "../../shared/systems/Renderer";
-import { Sprite } from "pixi.js";
 import { Game } from "../../shared/Game";
 
 class Server {

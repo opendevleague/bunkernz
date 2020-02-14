@@ -19,10 +19,7 @@ export abstract class System {
      */
     protected readonly requiredComponents: typeof Component[] = [];
 
-    protected getComponent<T extends typeof Component>(
-        entity: Entity,
-        type: T,
-    ): InstanceType<T> {
+    protected getComponent<T extends typeof Component>(entity: Entity, type: T): InstanceType<T> {
         const typeName = type.name.toLowerCase();
 
         return this.entities[entity][typeName] as InstanceType<T>;
@@ -35,19 +32,13 @@ export abstract class System {
 
         this.requiredComponents.forEach(requiredComponent => {
             const componentName: string = requiredComponent.name.toLowerCase();
-            const component = components.find(
-                x => x.constructor.name === requiredComponent.name,
-            );
+            const component = components.find(x => x.constructor.name === requiredComponent.name);
 
             if (component == null)
-                throw new Error(
-                    `Entity ${entity} does not have the required component "${requiredComponent.name}" by system "${this.constructor.name}"`,
-                );
+                throw new Error(`Entity ${entity} does not have the required component "${requiredComponent.name}" by system "${this.constructor.name}"`);
 
             if (component.entity != entity)
-                throw new Error(
-                    "Component(s) from multiple entities passed to System.addEntity",
-                );
+                throw new Error("Component(s) from multiple entities passed to System.addEntity");
 
             // Add component to registered entity.
             componentsToAdd[componentName] = component;

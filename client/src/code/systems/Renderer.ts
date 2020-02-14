@@ -29,13 +29,14 @@ export default class Renderer extends System {
         const transform = this.getComponent(entity, Transform);
         const sprite = this.getComponent(entity, Sprite);
 
-        const pixiSprite = new Pixi.Sprite(Pixi.Texture.from(sprite.source));
-        pixiSprite.position.set(transform.position.x, transform.position.y);
-        this.pixiApp.stage.addChild(pixiSprite);
+        sprite.element = new Pixi.Sprite(Pixi.Texture.from(sprite.source));
+        this.pixiApp.stage.addChild(sprite.element);
     }
 
     public update(entity: Entity): void {
         const transform = this.getComponent(entity, Transform);
         const sprite = this.getComponent(entity, Sprite);
+
+        sprite.element.position.set(transform.position.x, transform.position.y);
     }
 }

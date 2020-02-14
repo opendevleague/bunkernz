@@ -10,7 +10,7 @@ export class Ecs {
         return Object.keys(this.entities).length;
     }
 
-    public createEntity(components: Component[]): number {
+    public createEntity(components: Component[]): Entity {
         const entity = this.entityCount;
         this.entities[entity] = components;
 
@@ -26,12 +26,12 @@ export class Ecs {
         return entity;
     }
 
-    public addSystem(system: System): number {
+    public addSystem(system: System): Entity {
         const systemId = this.systems.length;
 
         // Register all entities.
         Object.keys(this.entities).forEach(key => {
-            const entity: number = parseInt(key);
+            const entity: Entity = parseInt(key);
             system.registerEntity(entity, this.entities[entity]);
         });
 
