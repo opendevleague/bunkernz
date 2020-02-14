@@ -3,6 +3,7 @@ import { Component } from "./Component";
 import { System, Components } from "./System";
 
 export class Ecs {
+
     public entities: Entities = {};
     public systems: System[] = [];
 

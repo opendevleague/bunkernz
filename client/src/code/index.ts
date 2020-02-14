@@ -15,14 +15,12 @@ class Client extends Game {
         super();
 
         this.canvas = document.getElementById("view") as HTMLCanvasElement;
-        this.canvas.oncontextmenu = (event) => {
+        this.canvas.oncontextmenu = event => {
             event.preventDefault();
             event.stopPropagation();
         };
 
-        this.addSystem(
-            new Renderer(this.canvas),
-        );
+        this.addSystem(new Renderer(this.canvas));
 
         const player = this.createEntity([new Sprite(PlayerSprite), new Transform()]);
     }

@@ -4,6 +4,7 @@ import { Transform } from "../components/Transform";
 import { Collider } from "../components/Collider";
 
 export class Physics extends System {
+
     protected start(entity: Entity): void {
         console.log("started physics system, components: ", entity);
     }

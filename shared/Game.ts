@@ -5,6 +5,7 @@ import { Transform } from "./components/Transform";
 import { Sprite } from "./components/Sprite";
 
 export class Game extends Ecs {
+
     private deltaTime = 0;
 
     public start(): void {

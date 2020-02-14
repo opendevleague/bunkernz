@@ -3,6 +3,7 @@ import buildConfig from "../../build/config";
 import { Game } from "../../shared/Game";
 
 class Server {
+
     private readonly socket: ws.Server;
     private readonly game: Game;
 

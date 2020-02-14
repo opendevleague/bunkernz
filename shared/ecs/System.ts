@@ -10,6 +10,7 @@ export interface SystemEntities {
 }
 
 export abstract class System {
+
     /**
      * System's entity-component dicionary.
      */
@@ -26,7 +27,8 @@ export abstract class System {
     }
 
     public registerEntity(entity: Entity, components: Component[]): void {
-        if (this.entities[entity] != null) return;
+        if (this.entities[entity] != null)
+            return;
 
         const componentsToAdd: Components = {};
 

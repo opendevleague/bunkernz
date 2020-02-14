@@ -4,6 +4,7 @@ import Sprite from "../components/Sprite";
 import { Transform } from "../../../../shared/components/Transform";
 
 export default class Renderer extends System {
+
     private pixiApp: Pixi.Application;
 
     protected requiredComponents = [Sprite, Transform];
