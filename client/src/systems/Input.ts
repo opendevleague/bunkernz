@@ -1,33 +1,33 @@
 import { System, Component, Entity } from "../../../shared/ecs";
 import ActionMap from "../components/ActionMap";
-import Engine from "../../../shared/Engine";
 
-export default class Input extends System {
-    private listeners: Record<string, Array<() => void>> = {};
+// export default class Input extends System {
 
-    public constructor(actions: Record<string, string>) {
-        super();
+//     private listeners: Record<string, Array<() => void>> = {};
 
-        Object.entries(actions).forEach(([name, key]) => {
-            this.listeners[name] = [];
+//     public constructor(actions: Record<string, string>) {
+//         super();
 
-            document.addEventListener("keydown", ev => {
-                if (ev.key === key) {
-                    this.listeners[name].forEach(callback => callback());
-                }
-            });
-        });
-    }
+//         Object.entries(actions).forEach(([name, key]) => {
+//             this.listeners[name] = [];
 
-    public update(engine: Engine): void {
-        engine.createdComponents().forEach(component => {
-            if (component instanceof ActionMap && component.entity) {
-                const entity = component.entity;
+//             document.addEventListener("keydown", ev => {
+//                 if (ev.key === key) {
+//                     this.listeners[name].forEach(callback => callback());
+//                 }
+//             });
+//         });
+//     }
 
-                Object.entries(component.map).forEach(([name, callback]) => {
-                    this.listeners[name].push(callback.bind(component, entity));
-                });
-            }
-        });
-    }
-}
+//     public update(engine: Engine): void {
+//         engine.createdComponents().forEach(component => {
+//             if (component instanceof ActionMap && component.entity) {
+//                 const entity = component.entity;
+
+//                 Object.entries(component.map).forEach(([name, callback]) => {
+//                     this.listeners[name].push(callback.bind(component, entity));
+//                 });
+//             }
+//         });
+//     }
+// }

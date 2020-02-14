@@ -1,64 +1,73 @@
 import buildConfig from "../../build/config";
 import "../style/index.scss";
-import Engine from "../../shared/Engine";
 import Renderer from "./systems/Renderer";
-import Texture from "./components/Texture";
 import bunny from "../assets/img/bunny.png";
-import Position from "../../shared/components/Position";
 import Sprite from "./components/Sprite";
-import Input from "./systems/Input";
+// import Input from "./systems/Input";
 import ActionMap from "./components/ActionMap";
 import NetworkClient from "./systems/NetworkClient";
-import LocalPlayer from "./components/LocalPlayer";
+import NetworkedPlayer from "../../shared/components/NetworkedPlayer";
+import * as PIXI from "pixi.js";
+import { Game } from "../../shared/Game";
+import PlayerSprite from "../media/assets/bunny.png";
+import { Transform } from "../../shared/components/Transform";
 
-const engine = new Engine();
+class Client extends Game {
 
-engine.addSystem(
-    new Renderer(document.getElementById("view") as HTMLCanvasElement),
-);
+    private canvas: HTMLCanvasElement;
 
-engine.addSystem(
-    new Input({
-        up: "ArrowUp",
-        down: "ArrowDown",
-        left: "ArrowLeft",
-        right: "ArrowRight",
-    }),
-);
+    public constructor() {
+        super();
 
-engine.addSystem(new NetworkClient(buildConfig.client.server));
+        this.canvas = document.getElementById("view") as HTMLCanvasElement;
+        this.canvas.oncontextmenu = event => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
 
-engine.createEntity([
-    new LocalPlayer(),
-    new Position(),
-    new Sprite(),
-    new Texture(bunny),
-    new ActionMap({
-        up: (entity): void => {
-            const position = entity.getComponent(Position);
-            if (!position) return;
+        this.addSystem(new Renderer(this.canvas));
+        // this.addSystem(new Input({
+        //     up: "ArrowUp",
+        //     down: "ArrowDown",
+        //     left: "ArrowLeft",
+        //     right: "ArrowRight",
+        // }));
+        this.addSystem(new NetworkClient(buildConfig.client.server, this));
 
-            position.y--;
-        },
-        down: (entity): void => {
-            const position = entity.getComponent(Position);
-            if (!position) return;
+        const localPlayer = this.createEntity([
+            new NetworkedPlayer(true),
+            new Transform(),
+            new Sprite(bunny),
+            // new ActionMap({
+            //     up: (entity): void => {
+            //         const position = entity.getComponent(Position);
+            //         if (!position) return;
 
-            position.y++;
-        },
-        left: (entity): void => {
-            const position = entity.getComponent(Position);
-            if (!position) return;
+            //         position.y--;
+            //     },
+            //     down: (entity): void => {
+            //         const position = entity.getComponent(Position);
+            //         if (!position) return;
 
-            position.x--;
-        },
-        right: (entity): void => {
-            const position = entity.getComponent(Position);
-            if (!position) return;
+            //         position.y++;
+            //     },
+            //     left: (entity): void => {
+            //         const position = entity.getComponent(Position);
+            //         if (!position) return;
 
-            position.x++;
-        },
-    }),
-]);
+            //         position.x--;
+            //     },
+            //     right: (entity): void => {
+            //         const position = entity.getComponent(Position);
+            //         if (!position) return;
 
-engine.run();
+            //         position.x++;
+            //     },
+            // }),
+        ]);
+
+        this.start();
+    }
+}
+
+const client = new Client();

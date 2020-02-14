@@ -1,5 +1,8 @@
-import { Entity } from ".";
+export class Component {
 
-export default class Component {
-    public entity: Entity | undefined;
+    public entity!: number;
+
+    constructor() {
+        // Required to prevent type collision
+    }
 }

@@ -1,8 +1,14 @@
-import Engine from "../../shared/Engine";
 import NetworkServer from "./systems/NetworkServer";
+import { Game } from "../../shared/Game";
 
-const engine = new Engine();
+class Server extends Game {
 
-engine.addSystem(new NetworkServer());
+    public constructor() {
+        super();
 
-engine.run();
+        this.addSystem(new NetworkServer());
+        this.start();
+    }
+}
+
+const server = new Server();

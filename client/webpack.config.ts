@@ -21,8 +21,7 @@ const config: Configuration = {
                         options: {
                             importLoaders: 1,
                             modules: {
-                                localIdentName:
-                                    "[name]-[local]--[hash:base64:5]",
+                                localIdentName: "[name]-[local]--[hash:base64:5]",
                             },
                         },
                     },
