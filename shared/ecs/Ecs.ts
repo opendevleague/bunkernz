@@ -11,6 +11,19 @@ export class Ecs {
         return Object.keys(this.entities).length;
     }
 
+    /**
+     * Handles errors when registering an entity in a system.
+     */
+    private registerEntity(system: System, entity: Entity, components: Component[]): boolean {
+        try {
+            system.registerEntity(entity, components);
+        } catch (error) {
+            return false;
+        }
+
+        return true;
+    }
+
     public createEntity(components: Component[]): Entity {
         const entity = this.entityCount;
         this.entities[entity] = components;
@@ -20,9 +33,7 @@ export class Ecs {
         });
 
         // Register entity in all systems.
-        this.systems.forEach(system => {
-            system.registerEntity(entity, components);
-        });
+        this.systems.forEach(system => this.registerEntity(system, entity, components));
 
         return entity;
     }
@@ -33,7 +44,7 @@ export class Ecs {
         // Register all entities.
         Object.keys(this.entities).forEach(key => {
             const entity: Entity = parseInt(key);
-            system.registerEntity(entity, this.entities[entity]);
+            this.registerEntity(system, entity, this.entities[entity]);
         });
 
         this.systems.push(system);

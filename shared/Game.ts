@@ -9,19 +9,15 @@ export class Game extends Ecs {
     private deltaTime = 0;
 
     public start(): void {
-        let lastTime = performance.now(),
-            currentTime;
+        let lastTime = Date.now();
 
-        setInterval(
-            () => {
-                currentTime = performance.now();
-                this.deltaTime = (currentTime - lastTime) / 1000;
+        setInterval(() => {
+            const currentTime = Date.now();
+            this.deltaTime = (currentTime - lastTime) / 1000;
 
-                this.loop(this.deltaTime);
+            this.loop(this.deltaTime);
 
-                lastTime = currentTime;
-            },
-            1000 / 60, // 60Hz
-        );
+            lastTime = currentTime;
+        }, 1000 / 60); // 60Hz
     }
 }

@@ -15,10 +15,11 @@ export abstract class System {
      * System's entity-component dicionary.
      */
     protected readonly entities: SystemEntities = {};
+
     /**
      * System's required components array.
      */
-    protected readonly requiredComponents: typeof Component[] = [];
+    protected abstract get requiredComponents(): typeof Component[];
 
     protected getComponent<T extends typeof Component>(entity: Entity, type: T): InstanceType<T> {
         const typeName = type.name.toLowerCase();

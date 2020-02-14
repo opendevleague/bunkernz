@@ -5,6 +5,13 @@ import { Collider } from "../components/Collider";
 
 export class Physics extends System {
 
+    protected get requiredComponents(): typeof Component[] {
+        return [
+            Transform,
+            Collider
+        ];
+    }
+
     protected start(entity: Entity): void {
         console.log("started physics system, components: ", entity);
     }

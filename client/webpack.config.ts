@@ -6,7 +6,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 const config: Configuration = {
     target: "web",
-    entry: path.resolve(__dirname, "src/code/index.ts"),
+    entry: path.resolve(__dirname, "src/index.ts"),
     output: {
         path: path.resolve(__dirname, "../dist/client"),
     },
@@ -45,8 +45,8 @@ const config: Configuration = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "src/html/index.html"),
-            favicon: path.resolve(__dirname, "src/media/favicon.png"),
+            template: path.resolve(__dirname, "assets/index.html"),
+            favicon: path.resolve(__dirname, "assets/img/favicon.png"),
         }),
         new MiniCssExtractPlugin(),
     ],
