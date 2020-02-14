@@ -2,7 +2,7 @@ import WebSocket, { Server } from "ws";
 import buildConfig from "../../../build/config";
 import { System, Component } from "../../../shared/ecs";
 import { IncomingMessage } from "http";
-import { Transform } from "../../../shared/components/Transform";
+import Transform from "../../../shared/components/Transform";
 
 type OutgoingMessage = Record<string, any> | string;
 

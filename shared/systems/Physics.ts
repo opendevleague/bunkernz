@@ -1,7 +1,7 @@
 import { System, Component, Entity } from "../ecs";
 import { Components } from "../ecs/System";
-import { Transform } from "../components/Transform";
-import { Collider } from "../components/Collider";
+import Transform from "../components/Transform";
+import Collider from "../components/Collider";
 
 export class Physics extends System {
 

@@ -1,7 +1,7 @@
 import { System, Component, Entity, Entities } from "../../../shared/ecs";
 import Keyboard, { KeyEvent } from "../components/Keyboard";
 import CharacterInput from "../../../shared/components/CharacterInput";
-import { Vector2 } from "../../../shared/types/Vector2";
+import Vector2 from "../../../shared/types/Vector2";
 import NetworkedPlayer from "../../../shared/components/NetworkedPlayer";
 
 /**

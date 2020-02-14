@@ -1,4 +1,4 @@
-export class Vector2 {
+export default class Vector2 {
 
     public x: number;
     public y: number;
@@ -41,6 +41,12 @@ export class Vector2 {
         return vector;
     }
 
+    public static multiply(lhs: Vector2, rhs: Vector2): Vector2 {
+        const vector = new Vector2(lhs);
+        vector.multiply(rhs);
+        return vector;
+    }
+
     public static div(lhs: Vector2, rhs: Vector2): Vector2 {
         return new Vector2(lhs.x / rhs.x, lhs.y / rhs.y);
     }
@@ -54,7 +60,7 @@ export class Vector2 {
     }
 
     public constructor(other: Vector2);
-    public constructor(x: number, y: number);
+    public constructor(x: number, y?: number);
     public constructor(a: number | Vector2, b?: number) {
         if (a instanceof Vector2) {
             this.x = a.x;
@@ -63,7 +69,8 @@ export class Vector2 {
             this.x = a;
             this.y = b;
         } else {
-            throw new Error("Vector2 must be constructed with two parameters, or another Vector2.");
+            this.x = a;
+            this.y = a;
         }
     }
 
@@ -87,5 +94,27 @@ export class Vector2 {
     public scale(scalar: number): void {
         this.x *= scalar;
         this.y *= scalar;
+    }
+
+    public multiply(rhs: Vector2): void {
+        this.x *= rhs.x;
+        this.y *= rhs.y;
+    }
+
+    public magnitude(): number {
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
+    public normalize(): void {
+        const magnitude = this.magnitude();
+
+        if (magnitude == 0) {
+            this.x = 0;
+            this.y = 0;
+            return;
+        }
+
+        this.x /= magnitude;
+        this.y /= magnitude;
     }
 }

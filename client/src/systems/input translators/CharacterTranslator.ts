@@ -2,7 +2,7 @@ import { System, Component, Entity } from "../../../../shared/ecs";
 import ActionMap, { KeyEvent } from "../../components/Keyboard";
 import Keyboard from "../../components/Keyboard";
 import CharacterInput from "../../../../shared/components/CharacterInput";
-import { Vector2 } from "../../../../shared/types/Vector2";
+import Vector2 from "../../../../shared/types/Vector2";
 import InputTranslator from "../InputTranslator";
 
 /**
@@ -19,10 +19,10 @@ export default class CharacterTranslator extends InputTranslator {
     public update(entity: Entity): void {
         const input = this.getComponent(entity, CharacterInput);
 
-        const moveUp = this.getKey("KeyW")?.isDown;
-        const moveDown = this.getKey("KeyS")?.isDown;
-        const moveLeft = this.getKey("KeyA")?.isDown;
-        const moveRight = this.getKey("KeyD")?.isDown;
+        const moveUp = this.getKey("KeyW")?.isHeld;
+        const moveDown = this.getKey("KeyS")?.isHeld;
+        const moveLeft = this.getKey("KeyA")?.isHeld;
+        const moveRight = this.getKey("KeyD")?.isHeld;
 
         input.moveVector = Vector2.zero;
 

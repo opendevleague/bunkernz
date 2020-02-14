@@ -1,10 +1,10 @@
 import Ecs, { Entity, System, Component, Entities } from "../../../shared/ecs";
 import Sprite from "../components/Sprite";
 import bunny from "../../assets/img/bunny.png";
-import { Transform } from "../../../shared/components/Transform";
+import Transform from "../../../shared/components/Transform";
 import NetworkedPlayer from "../../../shared/components/NetworkedPlayer";
 import CharacterInput from "../../../shared/components/CharacterInput";
-import { Vector2 } from "../../../shared/types/Vector2";
+import Vector2 from "../../../shared/types/Vector2";
 import { SystemEntities } from "../../../shared/ecs/System";
 
 export default class NetworkClient extends System {

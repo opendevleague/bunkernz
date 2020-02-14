@@ -67,7 +67,7 @@ export abstract class System {
      */
     public loop(dt: number): void {
         Object.keys(this.entities).forEach(entity => {
-            this.update(+entity, dt);
+            this.update(entity as unknown as Entity, dt);
         });
     }
 

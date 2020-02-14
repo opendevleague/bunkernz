@@ -3,7 +3,7 @@ import { Component } from "../ecs";
 /**
  * Used to render a sprite.
  */
-export class Sprite extends Component {
+export default class Sprite extends Component {
 
     constructor(public source: string) {
         super();

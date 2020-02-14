@@ -16,21 +16,35 @@ export default class Input extends System {
         const keyboard = this.getComponent(entity, Keyboard);
 
         document.addEventListener("keydown", e => {
-            const event = e as KeyEvent;
-            event.isDown = true;
-            keyboard.keys.push(event);
+            let key = keyboard.keys.find(key => key.code == e.code);
+
+            if (key == null) {
+                key = e as KeyEvent;
+                keyboard.keys.push(key);
+            }
+
+            key.isDown = true;
+            key.isHeld = true;
         })
 
         document.addEventListener("keyup", e => {
-            const event = e as KeyEvent;
-            event.isDown = false;
-            keyboard.keys.push(event);
+            let key = keyboard.keys.find(key => key.code == e.code);
+
+            if (key == null) {
+                key = e as KeyEvent;
+                keyboard.keys.push(key);
+            }
+
+            key.isUp = true;
+            key.isHeld = false;
         });
     }
 
     public update(entity: Entity): void {
         const keyboard = this.getComponent(entity, Keyboard);
-        // Clear array.
-        keyboard.keys = [];
+        keyboard.keys.forEach(key => {
+            key.isUp = false;
+            key.isDown = false;
+        });
     }
 }
