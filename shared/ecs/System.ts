@@ -32,6 +32,10 @@ export abstract class System {
         console.log(`[${time}] [${this.constructor.name}]: ${text}`);
     }
 
+    /**
+     * Registers an entity into the system given its components match
+     * the system's requirements.
+     */
     public registerEntity(entity: Entity, components: Component[]): void {
         if (this.entities[entity] != null)
             return;
@@ -43,7 +47,8 @@ export abstract class System {
             const component = components.find(x => x.constructor.name === requiredComponent.name);
 
             if (component == null)
-                throw new Error(`Entity ${entity} does not have the required component "${requiredComponent.name}" by system "${this.constructor.name}"`);
+                throw new Error(`Entity ${entity} does not have the required component ` +
+                    `"${requiredComponent.name}" by system "${this.constructor.name}"`);
 
             if (component.entity != entity)
                 throw new Error("Component(s) from multiple entities passed to System.addEntity");
@@ -54,6 +59,30 @@ export abstract class System {
 
         this.entities[entity] = componentsToAdd;
         this.start(entity);
+    }
+
+    /**
+     * Checks if an entity still has all the required components,
+     * and unregisters it if not.
+     * @returns {boolean} Whether the entity is still valid.
+     */
+    public validateEntity(entity: Entity): boolean {
+        if (this.entities[entity] == null)
+            return false;
+
+        const keys = Object.keys(this.entities[entity]);
+
+        for (let i = 0; i < keys.length; i++) {
+            const component = this.entities[entity][keys[i]];
+
+            if (component.entity == entity)
+                continue;
+
+            this.removeEntity(entity);
+            return false;
+        }
+
+        return true;
     }
 
     public removeEntity(entity: number): void {

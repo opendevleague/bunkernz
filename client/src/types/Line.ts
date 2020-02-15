@@ -7,7 +7,7 @@ export default class Line extends Pixi.Graphics {
     public size: number;
     public color: number;
 
-    constructor(points: Vector2[], size: number = 1, color: number = 0xffffff) {
+    constructor(points: Vector2[], size = 1, color = 0xffffff) {
         super();
 
         this.points = points;

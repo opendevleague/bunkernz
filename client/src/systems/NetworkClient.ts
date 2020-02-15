@@ -122,8 +122,11 @@ export default class NetworkClient extends System {
 
                     entity = this.idToEntity.get(netId) as Entity;
 
-                    // if (entity)
-                    // dispose(entity);
+                    if (entity == null)
+                        break;
+
+                    // TODO: Return EntityCUD to delete entire entity; for now, disable renderer.
+                    this.ecs.removeEntity(entity);
                     break;
                 case "move":
                     if (!this.idToEntity.has(netId))

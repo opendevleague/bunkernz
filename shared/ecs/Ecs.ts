@@ -4,6 +4,7 @@ import { System, Components } from "./System";
 
 export class Ecs {
 
+    private baseEntityId: number = 0;
     public entities: Entities = {};
     public systems: System[] = [];
 
@@ -25,7 +26,7 @@ export class Ecs {
     }
 
     public createEntity(components: Component[]): Entity {
-        const entity = this.entityCount;
+        const entity = this.baseEntityId++;
         this.entities[entity] = components;
 
         components.forEach(component => {
@@ -36,6 +37,35 @@ export class Ecs {
         this.systems.forEach(system => this.registerEntity(system, entity, components));
 
         return entity;
+    }
+
+    public removeEntity(entity: Entity): void {
+        this.entities[entity].forEach(component => {
+            this.removeComponent(entity, component);
+        });
+
+        delete this.entities[entity];
+    }
+
+    public removeComponent(entity: Entity, component: Component | typeof Component) {
+        const componentName: string = component instanceof Component ? component.constructor.name.toLowerCase() : component.name.toLowerCase();
+        const components = this.entities[entity];
+        let componentIndex = -1;
+
+        for (let i = 0; i < components.length; i++) {
+            if (components[i].constructor.name.toLowerCase() !== componentName)
+                continue;
+
+            componentIndex = i;
+            break;
+        }
+
+        if (componentIndex == -1)
+            return;
+
+        this.entities[entity][componentIndex].entity = -1;
+        this.entities[entity].splice(componentIndex, 1);
+        this.systems.forEach(system => system.validateEntity(entity));
     }
 
     public addSystem(system: System): Entity {
