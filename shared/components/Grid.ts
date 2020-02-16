@@ -12,6 +12,8 @@ export class Grid extends Component {
     public horizontalCount = 40;
     public tiles: Tile[][] = [];
 
+    public static readonly baseTileSize: Vector2 = new Vector2(10, 10);
+
     constructor(horizontalCount = 40, verticalCount = 25) {
         super();
 
