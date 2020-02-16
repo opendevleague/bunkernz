@@ -4,7 +4,7 @@ import { System, Components } from "./System";
 
 export class Ecs {
 
-    private baseEntityId: number = 0;
+    private baseEntityId = 0;
     public entities: Entities = {};
     public systems: System[] = [];
 
