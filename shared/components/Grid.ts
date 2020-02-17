@@ -2,19 +2,18 @@ import { Component, Entity } from "../ecs";
 import Vector2 from "../types/Vector2";
 
 export interface Tile {
-    occupants: Entity[];
+    occupants: Entity[]
 }
 
 export class Grid extends Component {
 
-    public tileSize?: Vector2; // Client only.
-    public verticalCount = 25;
-    public horizontalCount = 40;
+    public verticalCount: number;
+    public horizontalCount: number;
     public tiles: Tile[][] = [];
 
-    public static readonly baseTileSize: Vector2 = new Vector2(10, 10);
+    public static readonly baseTileSize: number = 1;
 
-    constructor(horizontalCount = 40, verticalCount = 25) {
+    constructor(horizontalCount: number = Grid.baseTileSize, verticalCount: number = Grid.baseTileSize) {
         super();
 
         this.horizontalCount = horizontalCount;

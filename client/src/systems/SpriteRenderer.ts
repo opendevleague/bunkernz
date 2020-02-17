@@ -3,12 +3,16 @@ import * as Pixi from "pixi.js";
 import Sprite from "../components/Sprite";
 import Transform from "../../../shared/components/Transform";
 import Vector2 from "../../../shared/types/Vector2";
+import { Grid } from "../../../shared/components/Grid";
+import { ViewportGrid } from "../components/ViewportGrid";
 
 /**
  * TODO: Account for camera position.
  */
 export default class SpriteRenderer extends System {
 
+    private readonly baseSpriteSize = 20;
+    private viewport: ViewportGrid;
     private pixi: Pixi.Application;
 
     protected get requiredComponents(): typeof Component[] {
@@ -18,10 +22,11 @@ export default class SpriteRenderer extends System {
         ];
     }
 
-    constructor(pixi: Pixi.Application) {
+    constructor(pixi: Pixi.Application, viewport: ViewportGrid) {
         super();
 
         this.pixi = pixi;
+        this.viewport = viewport;
     }
 
     public start(entity: Entity): void {
@@ -42,7 +47,15 @@ export default class SpriteRenderer extends System {
         const sprite = this.getComponent(entity, Sprite);
         const transform = this.getComponent(entity, Transform);
 
-        // TODO: Account for grid size/aspect ratio/camera offset.
-        sprite.element.position.set(transform.position.x, transform.position.y);
+        const scaleFactor = (this.viewport.tileSize ?? Grid.baseTileSize) * (this.baseSpriteSize / 1000) / Grid.baseTileSize;
+        // World position is the offset of the current position and the viewport position...
+        const worldPosition = Vector2.subtract(transform.position, this.viewport.position);
+        // ... scaled to the current tile size...
+        worldPosition.scale(scaleFactor);
+        // ... positioned at the current viewport offset (screen centre).
+        worldPosition.add(Vector2.scale(this.viewport.targetOffset, this.viewport.tileSize));
+
+        sprite.element.scale.set(scaleFactor);
+        sprite.element.position.set(worldPosition.x, worldPosition.y);
     }
 }

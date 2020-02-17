@@ -101,6 +101,16 @@ export default class Vector2 {
         this.y *= rhs.y;
     }
 
+    /**
+     * Limit the elements of this Vector to a minimum.
+     */
+    public min(x: number, y?: number) {
+        y = y ?? x;
+        this.x = Math.max(0, x);
+        this.y = Math.max(0, y);
+        return this;
+    }
+
     public magnitude(): number {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }

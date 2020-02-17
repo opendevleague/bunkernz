@@ -47,6 +47,10 @@ export class Ecs {
         delete this.entities[entity];
     }
 
+    public getComponent<T extends typeof Component>(entity: Entity, type: T): InstanceType<T> {
+        return this.entities[entity].find(x => x.constructor.name.toLowerCase() === type.name.toLowerCase()) as InstanceType<T>;
+    }
+
     public removeComponent(entity: Entity, component: Component | typeof Component) {
         const componentName: string = component instanceof Component ? component.constructor.name.toLowerCase() : component.name.toLowerCase();
         const components = this.entities[entity];
