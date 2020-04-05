@@ -15,13 +15,17 @@ export class ViewportGrid extends Component {
 
     public target: Transform | null;
     /**
-     * Viewport offset from the top-left of the viewport to the top-left of the current level.
+     * Viewport offset from the top-left of the current level grid to the top-left of this viewport.
      */
     public position: Vector2 = Vector2.zero;
     /**
      * Offset from the current position, from the anchor (top-left).
      */
     public targetOffset: Vector2 = Vector2.zero;
+    /**
+     * The unscaled origin of this viewport, i.e. the central tile being rendered.
+     */
+    public origin: Vector2;
     public verticalCount: number;
     public horizontalCount: number;
     // Defines the scaled tile size to be rendered.
@@ -31,6 +35,7 @@ export class ViewportGrid extends Component {
     constructor(horizontalCount: number = Grid.baseTileSize, verticalCount: number = Grid.baseTileSize, target: Transform | null = null) {
         super();
 
+        this.origin = Vector2.zero;
         this.target = target;
         this.horizontalCount = horizontalCount;
         this.verticalCount = verticalCount;

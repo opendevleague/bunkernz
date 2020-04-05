@@ -5,7 +5,10 @@ import Vector2 from "../types/Vector2";
 
 export default class CharacterController extends System {
 
-    private readonly speed = 200;
+    /**
+     * Speed in tiles/second.
+     */
+    private readonly speed = 2.25;
 
     protected get requiredComponents(): typeof Component[] {
         return [

@@ -19,6 +19,7 @@ export default class LevelRenderer extends System {
     private horizontalLines: Line[] = [];
     private tileIds: Pixi.Text[][] = [];
     private pixi: Pixi.Application;
+    private offset: number = 0;
 
     protected get requiredComponents(): typeof Component[] {
         return [
@@ -108,14 +109,14 @@ export default class LevelRenderer extends System {
     /**
      * Precedurally render environment through a viewport grid.
      */
-    private renderGrid(entity: Entity, ) {
+    private renderGrid(entity: Entity) {
         const grid = this.getComponent(entity, Grid);
         const viewport = this.getComponent(entity, ViewportGrid);
 
-        // The scaled viewport (target) origin of the viewport within the grid - target-anchored.
-        const origin = Vector2.subtract(viewport.position, Vector2.scale(viewport.targetOffset, viewport.tileSize));
         // Viewport (target) tile origin - target-anchored.
-        const unscaledOrigin = Vector2.scale(viewport.position, 1 / viewport.tileSize);
+        viewport.origin = Vector2.scale(viewport.position, 1 /*/ viewport.tileSize*/);
+        // The scaled viewport (target) origin of the viewport within the grid - target-anchored.
+        const scaledOrigin = Vector2.scale(Vector2.subtract(viewport.position, viewport.targetOffset), viewport.tileSize);
         // Define a vector the size half of the viewport.
         const halfViewport = new Vector2(
             Math.ceil(viewport.horizontalCount / 2),
@@ -125,12 +126,12 @@ export default class LevelRenderer extends System {
         const bounds = {
             // The lower viewport boundary, anchored on the top-left tile (viewport(0,0)).
             min: Vector2.subtract(
-                unscaledOrigin,
+                viewport.origin,
                 // Restrain the lower boundary to a min value of (0,0).
                 halfViewport.min(0)
             ),
             max: Vector2.add(
-                unscaledOrigin,
+                viewport.origin,
                 halfViewport
             )
         };
@@ -140,16 +141,16 @@ export default class LevelRenderer extends System {
         const gridBottomBoundary: number = (grid.verticalCount + bounds.min.y) * viewport.tileSize;
 
         // Debug Position.
-        this.positionDebug.text = `POSITION ${unscaledOrigin.x.toFixed(0)},${unscaledOrigin.y.toFixed(0)}`;
+        this.positionDebug.text = `POSITION ${viewport.origin.x.toFixed(0)},${viewport.origin.y.toFixed(0)}`;
 
         for (let i = 0; i < viewport.horizontalCount; i++) {
             const tilePositionX = this.getTilePosition(
                 i,
-                unscaledOrigin.x,
+                viewport.origin.x,
                 viewport.horizontalCount
             );
 
-            const scaledTilePositionX = (tilePositionX * viewport.tileSize) - origin.x;
+            const scaledTilePositionX = (tilePositionX * viewport.tileSize) - scaledOrigin.x;
 
             // Clear if out of bounds.
             if (tilePositionX < 0 || tilePositionX > grid.horizontalCount) {
@@ -161,18 +162,18 @@ export default class LevelRenderer extends System {
 
             // Update vertical line.
             this.verticalLines[i].renderLine([
-                new Vector2(scaledTilePositionX, -origin.y),
+                new Vector2(scaledTilePositionX, -scaledOrigin.y),
                 new Vector2(scaledTilePositionX, gridBottomBoundary > this.pixi.screen.height ? this.pixi.screen.height : gridBottomBoundary),
             ], this.pixi.renderer);
 
             for (let j = 0; j < viewport.verticalCount; j++) {
                 const tilePositionY = this.getTilePosition(
                     j,
-                    unscaledOrigin.y,
+                    viewport.origin.y,
                     viewport.verticalCount
                 );
 
-                const scaledTilePositionY = (tilePositionY * viewport.tileSize) - origin.y;
+                const scaledTilePositionY = (tilePositionY * viewport.tileSize) - scaledOrigin.y;
 
                 // Clear if out of bounds.
                 if (tilePositionY < 0 || tilePositionY > grid.verticalCount) {
@@ -182,7 +183,7 @@ export default class LevelRenderer extends System {
 
                 // Update horizontal line.
                 this.horizontalLines[j].renderLine([
-                    new Vector2(-origin.x, scaledTilePositionY),
+                    new Vector2(-scaledOrigin.x, scaledTilePositionY),
                     new Vector2(gridRightBoundary > this.pixi.screen.width ? this.pixi.screen.width : gridRightBoundary, scaledTilePositionY),
                 ], this.pixi.renderer);
 
