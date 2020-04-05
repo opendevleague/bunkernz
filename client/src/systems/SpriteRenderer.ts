@@ -57,5 +57,6 @@ export default class SpriteRenderer extends System {
 
         sprite.element.scale.set(scaleFactor);
         sprite.element.position.set(worldPosition.x, worldPosition.y);
+        sprite.element.zIndex = sprite.element.position.y;
     }
 }

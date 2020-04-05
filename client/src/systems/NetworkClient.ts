@@ -1,6 +1,6 @@
 import Ecs, { Entity, System, Component, Entities } from "../../../shared/ecs";
 import Sprite from "../components/Sprite";
-import bunny from "../../assets/img/bunny.png";
+import bunny from "../../assets/public/bunny.png";
 import Transform from "../../../shared/components/Transform";
 import NetworkedPlayer from "../../../shared/components/NetworkedPlayer";
 import CharacterInput from "../../../shared/components/CharacterInput";

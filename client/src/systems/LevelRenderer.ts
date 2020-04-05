@@ -8,6 +8,13 @@ import { ViewportGrid, ViewportTile } from "../components/ViewportGrid";
 import Line from "../types/Line";
 import { Client } from "../index";
 
+// Testing tiles.
+import grass from '../../assets/public/tiles/category0/0.png';
+import grass1 from '../../assets/public/tiles/category0/1.png';
+import grass2 from '../../assets/public/tiles/category0/2.png';
+import dirt1 from '../../assets/public/tiles/category0/4.png';
+import dirt2 from '../../assets/public/tiles/category0/5.png';
+
 /**
  * TODO: Account for camera position.
  * The LevelRenderer is responsible for rendering level tiles.
@@ -19,7 +26,6 @@ export default class LevelRenderer extends System {
     private horizontalLines: Line[] = [];
     private tileIds: Pixi.Text[][] = [];
     private pixi: Pixi.Application;
-    private offset = 0;
 
     protected get requiredComponents(): typeof Component[] {
         return [
@@ -32,6 +38,8 @@ export default class LevelRenderer extends System {
         super();
 
         this.pixi = pixi;
+        // Enable Z-index.
+        this.pixi.stage.sortableChildren = true;
         this.positionDebug = Client.createDebugText(2, this.pixi);
     }
 
@@ -65,7 +73,7 @@ export default class LevelRenderer extends System {
             for (let j = 0; j < viewport.verticalCount; j++) {
                 const text = new Pixi.Text(`${i} , ${j}`);
                 text.scale.set(0.4);
-                text.style.fill = 0x707070;
+                text.style.fill = 0x000;
                 this.pixi.stage.addChild(text);
                 this.tileIds[i][j] = text;
             }
@@ -192,6 +200,31 @@ export default class LevelRenderer extends System {
                 // Set text location.
                 this.tileIds[i][j].x = scaledTilePositionX + 7;
                 this.tileIds[i][j].y = scaledTilePositionY + 3;
+
+                if (viewport.viewportTiles[i] == null)
+                    viewport.viewportTiles[i] = [];
+
+                if (viewport.viewportTiles[i][j] == null)
+                    viewport.viewportTiles[i][j] = {
+                        category: 0,
+                        tile: 0,
+                        sprite: null
+                    };
+
+                const tile = viewport.viewportTiles[i][j];
+
+                if (tile.sprite == null) {
+                    // tile.sprite = new Pixi.Sprite(Pixi.Texture.from(`/assets/tiles/category${tile.category}/${tile.tile}.png`));
+                    tile.sprite = new Pixi.Sprite(Pixi.Texture.from(dirt1));
+                    this.pixi.stage.addChild(tile.sprite);
+                    tile.sprite.width = viewport.tileSize;
+                    tile.sprite.height = viewport.tileSize;
+                    tile.sprite.zIndex = -10;
+                    tile.sprite.updateTransform();
+                }
+
+                // tile.sprite.visible = tilePositionX >= viewport.origin.x && tilePositionY >= viewport.origin.y;
+                tile.sprite.position.set(scaledTilePositionX, scaledTilePositionY);
             }
         }
     }

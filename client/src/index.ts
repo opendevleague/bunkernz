@@ -1,6 +1,6 @@
 import buildConfig from "../../build/config";
 import "../style/index.scss";
-import bunny from "../assets/img/bunny.png";
+import bunny from "../assets/public/bunny.png";
 import Sprite from "./components/Sprite";
 import NetworkClient from "./systems/NetworkClient";
 import NetworkedPlayer from "../../shared/components/NetworkedPlayer";

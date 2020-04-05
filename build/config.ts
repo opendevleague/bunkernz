@@ -8,6 +8,7 @@ export default {
         devServer: {
             host: "localhost",
             port: 9000,
+            publicPath: '/assets'
         },
     },
 };

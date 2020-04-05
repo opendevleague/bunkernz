@@ -2,9 +2,12 @@ import { Component, Entity } from "../../../shared/ecs";
 import { Grid } from "../../../shared/components/Grid";
 import Vector2 from "../../../shared/types/Vector2";
 import Transform from "../../../shared/components/Transform";
+import { Sprite } from "pixi.js";
 
 export interface ViewportTile {
-    spriteId: number;
+    category: number;
+    tile: number;
+    sprite: Sprite | null;
 }
 
 /**
@@ -46,7 +49,9 @@ export class ViewportGrid extends Component {
 
             for (let j = 0; j < this.verticalCount; j++) {
                 this.viewportTiles[i][j] = {
-                    spriteId: 0
+                    category: 0,
+                    tile: 0,
+                    sprite: null
                 };
             }
         }
