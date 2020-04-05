@@ -47,11 +47,13 @@ export default class SpriteRenderer extends System {
         const sprite = this.getComponent(entity, Sprite);
         const transform = this.getComponent(entity, Transform);
 
+        console.log('sprite pos: ', transform.position);
+
         const scaleFactor = (this.viewport.tileSize ?? Grid.baseTileSize) * (this.baseSpriteSize / 1000) / Grid.baseTileSize;
         // World position is the offset of the current position and the viewport position...
         const worldPosition = Vector2.subtract(transform.position, this.viewport.position);
         // ... scaled to the current tile size...
-        worldPosition.scale(scaleFactor);
+        worldPosition.scale(this.viewport.tileSize);
         // ... positioned at the current viewport offset (screen centre).
         worldPosition.add(Vector2.scale(this.viewport.targetOffset, this.viewport.tileSize));
 
