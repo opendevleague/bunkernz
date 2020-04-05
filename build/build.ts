@@ -7,11 +7,11 @@ import serverConfig from "../server/webpack.config";
 
 const compiler = webpack([
     {
-        mode: "production",
+        mode: "development",
         ...serverConfig,
     },
     {
-        mode: "production",
+        mode: "development",
         ...clientConfig,
     },
 ]);
