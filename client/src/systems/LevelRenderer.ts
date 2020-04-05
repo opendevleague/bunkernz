@@ -19,7 +19,7 @@ export default class LevelRenderer extends System {
     private horizontalLines: Line[] = [];
     private tileIds: Pixi.Text[][] = [];
     private pixi: Pixi.Application;
-    private offset: number = 0;
+    private offset = 0;
 
     protected get requiredComponents(): typeof Component[] {
         return [

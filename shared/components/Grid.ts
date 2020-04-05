@@ -2,7 +2,7 @@ import { Component, Entity } from "../ecs";
 import Vector2 from "../types/Vector2";
 
 export interface Tile {
-    occupants: Entity[]
+    occupants: Entity[];
 }
 
 export class Grid extends Component {
