@@ -3,30 +3,21 @@ import * as Pixi from "pixi.js";
 
 export default class Line extends Pixi.Graphics {
 
-    public points: Vector2[];
     public size: number;
     public color: number;
 
     constructor(points: Vector2[], size = 1, color = 0xffffff) {
         super();
 
-        this.points = points;
         this.size = size;
         this.color = color;
-
-        this.setPoints(points);
     }
 
-    public setPoints(points: Vector2[]) {
+    public renderLine(points: Vector2[], renderer: Pixi.Renderer) {
         this.clear();
-        this.points = points;
-        this.renderLine();
-    }
-
-    private renderLine() {
         this.lineStyle(this.size, this.color);
 
-        this.points.forEach((point, i) => {
+        points.forEach((point, i) => {
             if (i == 0) {
                 this.moveTo(point.x, point.y);
                 return;
@@ -34,5 +25,7 @@ export default class Line extends Pixi.Graphics {
 
             this.lineTo(point.x, point.y);
         });
+
+        this.render(renderer);
     }
 }

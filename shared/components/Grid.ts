@@ -7,12 +7,13 @@ export interface Tile {
 
 export class Grid extends Component {
 
-    public tileSize?: Vector2; // Client only.
-    public verticalCount = 25;
-    public horizontalCount = 40;
+    public verticalCount: number;
+    public horizontalCount: number;
     public tiles: Tile[][] = [];
 
-    constructor(horizontalCount = 40, verticalCount = 25) {
+    public static readonly baseTileSize: number = 1;
+
+    constructor(horizontalCount: number = Grid.baseTileSize, verticalCount: number = Grid.baseTileSize) {
         super();
 
         this.horizontalCount = horizontalCount;
