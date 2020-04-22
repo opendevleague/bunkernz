@@ -1,5 +1,6 @@
 use nalgebra::*;
 
+#[derive(Clone)]
 pub struct Transform {
     position: Vector2<f32>,
     forward: Vector2<f32>,

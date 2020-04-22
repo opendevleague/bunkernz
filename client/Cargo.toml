@@ -4,25 +4,12 @@ version = "0.0.1"
 authors = ["opendevleague"]
 edition = "2018"
 
-[lib]
-crate-type = ["cdylib"]
+[[bin]]
+name = "bunkernz_client"
+path = "src/main.rs"
 
 [dependencies]
-js-sys = "0.3.37"
-wasm-bindgen = "0.2.60"
-console_error_panic_hook = "0.1.6"
 engine = { path = "../engine", version = "^0" }
-
-[dependencies.web-sys]
-version = "0.3.4"
-features = [
-  'Document',
-  'Element',
-  'HtmlCanvasElement',
-  'WebGlBuffer',
-  'WebGlRenderingContext',
-  'WebGlContextAttributes',
-  'WebGlProgram',
-  'WebGlShader',
-  'Window',
-]
+oxid = { git = "https://github.com/rellfy/oxid", branch = "master" }
+#oxid = { path = "../../oxid/oxid" }
+glam = { version = "0.8", features = ["scalar-math"] }

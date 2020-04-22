@@ -1,0 +1,25 @@
+{
+    "server": {
+        "enabled": true,
+        "port": 8080,
+        "path": "../dist"
+    },
+    "watcher": {
+        "enabled": true,
+        "alwaysCopyAll": true,
+        "copy": [{
+            "from": "../../target/wasm32-unknown-unknown/debug/",
+            "to": "../dist",
+            "files": [
+                "bunkernz_client.wasm"
+            ]
+        }, {
+            "from": "../web",
+            "to": "../dist",
+            "files": [
+                "index.html",
+                "gl.js"
+            ]
+        }]
+    }
+}

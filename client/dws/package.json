@@ -1,0 +1,12 @@
+{
+  "name": "dev-wasm-server",
+  "version": "1.0.0",
+  "description": "Static web server for serving and manipulating WASM files",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Lorenzo Fontoura",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
