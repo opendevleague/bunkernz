@@ -2,7 +2,14 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use std::cell::RefCell;
 use std::rc::Rc;
-use crate::core::*;
+use crate::core::{
+    *,
+    projection::*,
+    batch::*,
+    framebuffer::*,
+    textures::*,
+};
+use crate::display;
 use web_sys::{
     Window,
     Document,
@@ -15,9 +22,13 @@ use web_sys::{
 };
 
 pub struct Renderer {
+    pub framebuffer_system: FramebufferSystem<'static>,
+    pub batch_system: BatchSystem,
+    pub texture_system: TextureSystem<'static>,
+    pub projection_system: ProjectionSystem,
+    pub ctx: WebGlRenderingContext,
     window: Window,
     canvas: HtmlCanvasElement,
-    ctx: WebGlRenderingContext,
 }
 
 impl Renderer {
@@ -31,6 +42,10 @@ impl Renderer {
             .dyn_into::<WebGlRenderingContext>()?;
 
         let mut renderer = Renderer {
+            framebuffer_system: Default::default(),
+            batch_system: Default::default(),
+            texture_system: Default::default(),
+            projection_system: Default::default(),
             window,
             canvas,
             ctx,
@@ -90,7 +105,16 @@ impl Renderer {
         Ok(renderer)
     }
 
-    pub fn render(&mut self) { }
+    pub fn render(&mut self, object: &mut dyn display::Renderable, texture: &mut textures::Texture) {
+        // self.renderTextureSystem.bind(texture);
+        // self.batch.currentRenderer.start();
+        // Clear canvas before render.
+        // self.renderTextureSystem.clear();
+        object.render(self);
+        // Apply transform.
+        // self.batch.currentRenderer.flush();
+        texture.base.update();
+    }
 
     fn setup_animation_frame(&mut self) {
         //let mut rc = Rc::new(self);

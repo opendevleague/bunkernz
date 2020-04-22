@@ -22,7 +22,9 @@ features = [
   'WebGlBuffer',
   'WebGlRenderingContext',
   'WebGlContextAttributes',
+  'WebGlFramebuffer',
   'WebGlProgram',
   'WebGlShader',
+  'WebGlTexture',
   'Window',
 ]

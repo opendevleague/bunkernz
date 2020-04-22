@@ -9,8 +9,6 @@ use std::panic;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
-// use engine::
-
 #[wasm_bindgen(start)]
 pub fn start() -> Result<(), JsValue> {
     console_log!("starting bunkernz client");
