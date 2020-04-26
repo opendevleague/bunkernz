@@ -21,18 +21,18 @@ use web_sys::{
     WebGlBuffer
 };
 
-pub struct Renderer {
-    pub framebuffer_system: FramebufferSystem<'static>,
+pub struct Renderer<'a> {
+    pub framebuffer_system: FramebufferSystem,
     pub batch_system: BatchSystem,
-    pub texture_system: TextureSystem<'static>,
+    pub texture_system: TextureSystem<'a>,
     pub projection_system: ProjectionSystem,
     pub ctx: WebGlRenderingContext,
     window: Window,
     canvas: HtmlCanvasElement,
 }
 
-impl Renderer {
-    pub fn from(window: Window) -> Result<Renderer, JsValue> {
+impl<'a> Renderer<'a> {
+    pub fn from(window: Window) -> Result<Renderer<'a>, JsValue> {
         let canvas = window.document().unwrap().get_element_by_id("canvas").unwrap();
         let canvas: web_sys::HtmlCanvasElement = canvas.dyn_into::<web_sys::HtmlCanvasElement>()?;
 

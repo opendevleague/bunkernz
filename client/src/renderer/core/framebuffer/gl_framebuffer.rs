@@ -1,7 +1,7 @@
 use web_sys::WebGlFramebuffer;
 
 pub struct GlFramebuffer {
-    pub framebuffer: Option<WebGlFramebuffer>,
+    pub data: Option<WebGlFramebuffer>,
     pub dirtyId: u32,
     pub dirtyFormat: u32,
     pub dirtySize: u32,
@@ -14,9 +14,9 @@ impl Default for GlFramebuffer {
 }
 
 impl GlFramebuffer {
-    fn from(framebuffer: Option<WebGlFramebuffer>) -> GlFramebuffer {
+    fn from(data: Option<WebGlFramebuffer>) -> GlFramebuffer {
         GlFramebuffer {
-            framebuffer,
+            data,
             dirtyId: 0,
             dirtyFormat: 0,
             dirtySize: 0,

@@ -29,7 +29,14 @@ impl Default for ProjectionSystem {
 }
 
 impl ProjectionSystem {
-    pub fn update(&mut self, /*renderer: &Renderer,*/ destination_frame: &Rectangle, source_frame: &Rectangle, resolution: f32, root: bool) {
+    pub fn update(
+        &mut self,
+        /*renderer: &Renderer,*/
+        destination_frame: &Rectangle,
+        source_frame: &Rectangle,
+        resolution: f32,
+        root: bool)
+    {
         self.destination_frame = destination_frame.clone();
         self.source_frame = source_frame.clone();
 

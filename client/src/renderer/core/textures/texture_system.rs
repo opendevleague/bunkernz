@@ -1,5 +1,6 @@
 use crate::core::textures::Texture;
 use crate::Renderer;
+use crate::core::framebuffer::FramebufferSystem;
 use engine::*;
 
 pub struct TextureSystem<'a> {
@@ -21,7 +22,16 @@ impl Default for TextureSystem<'_> {
 impl<'a> TextureSystem<'a> {
 
     /// Bind the current texture.
-    pub fn bind(&'a mut self, renderer: &'a mut Renderer, texture: &'a mut Texture) {
+    pub fn bind(
+        &'a mut self,
+        framebuffer_system: &'a mut FramebufferSystem,
+        renderer: &'a mut Renderer<'a>,
+        texture: &'a mut Texture) 
+    {
+        // Update current texture.
+        self.current_texture = Some(texture);
+        let texture = self.current_texture.as_mut().unwrap();
+
         let mut rect: types::Rectangle = Default::default();
         // if no destination frame...
         rect.size.x = texture.base.width;
@@ -31,7 +41,8 @@ impl<'a> TextureSystem<'a> {
         // if no source frame...
         self.source_frame = self.destination_frame.clone();
 
-        renderer.framebuffer_system.bind(&renderer, &mut texture.base.framebuffer/*, self.destination_frame*/);
+        // TODO
+        // framebuffer_system.bind(renderer, texture.base.framebuffer/*, self.destination_frame*/);
         renderer.projection_system.update(
             // &renderer,
             &self.destination_frame,
@@ -46,9 +57,6 @@ impl<'a> TextureSystem<'a> {
         self.destination_frame.position.y /= texture.base.resolution;
         self.destination_frame.size.x /= texture.base.resolution;
         self.destination_frame.size.y /= texture.base.resolution;
-
-        // Update current texture.
-        self.current_texture = Some(texture);
     }
 
     // TODO

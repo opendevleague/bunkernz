@@ -1,7 +1,7 @@
 use crate::core::framebuffer::GlFramebuffer;
 
 pub struct Framebuffer {
-    pub gl_framebuffer: GlFramebuffer,
+    pub gl: GlFramebuffer,
     pub dirtyId: u32,
     pub dirtyFormat: u32,
     pub dirtySize: u32,
@@ -14,7 +14,7 @@ pub struct Framebuffer {
 impl Framebuffer {
     pub fn from(width: f32, height: f32) -> Framebuffer {
         Framebuffer {
-            gl_framebuffer: Default::default(),
+            gl: Default::default(),
             width,
             height,
             use_stencil: false,
