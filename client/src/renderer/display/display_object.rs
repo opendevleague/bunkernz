@@ -1,24 +1,27 @@
 use engine::types::*;
-use crate::renderer::display::{
-    Renderable,
-    Sprite
-};
-use crate::renderer::core::{
-    Renderer,
-    textures::Texture
+use crate::renderer::{
+    core::{
+        Renderer,
+        textures::Texture,
+        batch::Batchable
+    },
+    display::{
+        Renderable,
+        Sprite,
+    }
 };
 
-#[derive(Clone)]
+/// TODO: Make this into a trait.
 pub struct DisplayContainer {
     pub width: f32,
     pub height: f32,
     pub visible: bool,
+    pub children: Vec<Sprite>,
     transform: Transform,
     alpha: f32,
     z_index: i16,
     renderable: bool,
     destroyed: bool,
-    children: Vec<DisplayContainer>,
     // parent: Option<&'a DisplayContainer>,
 }
 
@@ -52,6 +55,7 @@ impl DisplayContainer {
             return;
         }
     
+        // Render inner "batchables" (currently only sprites).
         for child in &mut self.children {
             child.render(&mut renderer);
         }

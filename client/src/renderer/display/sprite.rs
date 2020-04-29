@@ -1,7 +1,6 @@
 use engine::types::*;
 use engine::*;
 use nalgebra::*;
-use std::cell::Cell;
 use crate::renderer::display::{
     DisplayContainer,
     Renderable
@@ -12,7 +11,6 @@ use crate::renderer::core::{
     batch::Batchable
 };
 
-#[derive(Clone)]
 pub struct Sprite {
     pub dc: DisplayContainer,
     pub indices: Vec<u16>,
@@ -28,9 +26,9 @@ impl Renderable for Sprite {
         }
 
         // TODO: Implement mask/filters?
-        self.calculateVertices();
+        self.calculate_vertices();
         let batchable = Batchable::Sprite(self);
-        renderer.batch.render(batchable);
+        renderer.batch.render(&renderer.ctx, batchable);
         // TOOD: Render children.
     }
 }
@@ -56,7 +54,85 @@ impl Sprite {
         self.dc.height = height;
     }
 
-    fn calculateVertices(&mut self) {
-        
+    fn calculate_vertices(&mut self) {
+        // const texture = this._texture;
+
+        // if (this._transformID === this.transform._worldID && this._textureID === texture._updateID)
+        // {
+        //     return;
+        // }
+
+        // // update texture UV here, because base texture can be changed without calling `_onTextureUpdate`
+        // if (this._textureID !== texture._updateID)
+        // {
+        //     this.uvs = this._texture._uvs.uvsFloat32;
+        // }
+
+        // this._transformID = this.transform._worldID;
+        // this._textureID = texture._updateID;
+
+        // // set the vertex data
+
+        // const wt = this.transform.worldTransform;
+        // const a = wt.a;
+        // const b = wt.b;
+        // const c = wt.c;
+        // const d = wt.d;
+        // const tx = wt.tx;
+        // const ty = wt.ty;
+        // const vertexData = this.vertexData;
+        // const trim = texture.trim;
+        // const orig = texture.orig;
+        // const anchor = this._anchor;
+
+        // let w0 = 0;
+        // let w1 = 0;
+        // let h0 = 0;
+        // let h1 = 0;
+
+        // if (trim)
+        // {
+        //     // if the sprite is trimmed and is not a tilingsprite then we need to add the extra
+        //     // space before transforming the sprite coords.
+        //     w1 = trim.x - (anchor._x * orig.width);
+        //     w0 = w1 + trim.width;
+
+        //     h1 = trim.y - (anchor._y * orig.height);
+        //     h0 = h1 + trim.height;
+        // }
+        // else
+        // {
+        //     w1 = -anchor._x * orig.width;
+        //     w0 = w1 + orig.width;
+
+        //     h1 = -anchor._y * orig.height;
+        //     h0 = h1 + orig.height;
+        // }
+
+        // // xy
+        // vertexData[0] = (a * w1) + (c * h1) + tx;
+        // vertexData[1] = (d * h1) + (b * w1) + ty;
+
+        // // xy
+        // vertexData[2] = (a * w0) + (c * h1) + tx;
+        // vertexData[3] = (d * h1) + (b * w0) + ty;
+
+        // // xy
+        // vertexData[4] = (a * w0) + (c * h0) + tx;
+        // vertexData[5] = (d * h0) + (b * w0) + ty;
+
+        // // xy
+        // vertexData[6] = (a * w1) + (c * h0) + tx;
+        // vertexData[7] = (d * h0) + (b * w1) + ty;
+
+        // if (this._roundPixels)
+        // {
+        //     const resolution = settings.RESOLUTION;
+
+        //     for (let i = 0; i < vertexData.length; ++i)
+        //     {
+        //         vertexData[i] = Math.round((vertexData[i] * resolution | 0) / resolution);
+        //     }
+        // }
     }
 }

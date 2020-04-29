@@ -87,23 +87,22 @@ impl<'t, 'b> Renderer<'t, 'b> {
         let program = webgl::link_program(&renderer.ctx.get_mut(), &vert_shader, &frag_shader)?;
         renderer.ctx.get_mut().use_program(Some(&program));
 
-        
         renderer.clear();
+
+        // let vertices: [f32; 9] = [
+        //     -0.7, -0.7, 0.0,
+        //     0.7, -0.7, 0.0,
+        //     0.0, 0.7, 0.0
+        // ];
+        // renderer.render_polygon(&vertices);
         
-        let vertices: [f32; 9] = [
-            -0.7, -0.7, 0.0,
-            0.7, -0.7, 0.0,
-            0.0, 0.7, 0.0
-        ];
-        renderer.render_polygon(&vertices);
-        
-        let square: [f32; 12] = [
-            0.1, 0.1, 0.0,
-            0.1, 0.2, 0.0,
-            0.2, 0.2, 0.0,
-            0.2, 0.1, 0.0
-        ];
-        renderer.render_polygon(&square);
+        // let square: [f32; 12] = [
+        //     0.1, 0.1, 0.0,
+        //     0.1, 0.2, 0.0,
+        //     0.2, 0.2, 0.0,
+        //     0.2, 0.1, 0.0
+        // ];
+        // renderer.render_polygon(&square);
         
         renderer.setup_animation_frame();
         

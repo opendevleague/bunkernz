@@ -19,7 +19,9 @@ pub async fn start() -> Result<(), JsValue> {
     spawn_local(test::func());
     
     let window = web_sys::window().unwrap();
-    let renderer = Renderer::from(window).unwrap();
+    let mut application = Application::new(window);
+
+    application.render();
 
     Ok(())
 }

@@ -1,4 +1,3 @@
-use std::cell::Cell;
 use crate::renderer::*;
 
 pub trait Renderable {

@@ -8,7 +8,6 @@ pub struct Application<'r> {
 }
 
 impl<'r> Application<'r> {
-
     pub fn new(window: Window) -> Application<'r> {
         Application {
             container: DisplayContainer::default(),
