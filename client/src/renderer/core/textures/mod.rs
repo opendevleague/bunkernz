@@ -4,8 +4,8 @@ mod texture;
 mod resource;
 mod texture_system;
 
-pub use base_texture::BaseTexture;
-pub use gl_texture::GlTexture;
-pub use resource::Resource;
-pub use texture::Texture;
-pub use texture_system::TextureSystem;
+pub use base_texture::*;
+pub use gl_texture::*;
+pub use resource::*;
+pub use texture::*;
+pub use texture_system::*;

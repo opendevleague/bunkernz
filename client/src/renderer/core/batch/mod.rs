@@ -1,3 +1,3 @@
-mod batch_system;
+mod batch_renderer;
 
-pub use batch_system::BatchSystem;
+pub use batch_renderer::*;

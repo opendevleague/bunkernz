@@ -1,4 +1,4 @@
-use crate::Renderer;
+use crate::renderer::Renderer;
 use engine::nalgebra::*;
 use engine::types::Rectangle;
 

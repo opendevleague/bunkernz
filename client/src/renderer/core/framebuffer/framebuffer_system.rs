@@ -1,5 +1,5 @@
-use crate::Renderer;
-use crate::core::framebuffer::{
+use crate::renderer::Renderer;
+use crate::renderer::core::framebuffer::{
     Framebuffer,
     GlFramebuffer,
 };

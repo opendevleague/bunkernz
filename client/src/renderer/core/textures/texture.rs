@@ -1,8 +1,9 @@
-use crate::core::textures::BaseTexture;
+use crate::renderer::core::textures::BaseTexture;
 
+#[derive(Clone)]
 pub struct Texture {
     pub base: BaseTexture,
-    is_valid: bool,
+    pub is_valid: bool,
 }
 
 impl Texture {

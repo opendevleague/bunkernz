@@ -2,14 +2,6 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use std::cell::RefCell;
 use std::rc::Rc;
-use crate::core::{
-    *,
-    projection::*,
-    batch::*,
-    framebuffer::*,
-    textures::*,
-};
-use crate::display;
 use web_sys::{
     Window,
     Document,
@@ -20,30 +12,43 @@ use web_sys::{
     WebGlShader,
     WebGlBuffer
 };
+use crate::renderer::{
+    core::{
+        *,
+        projection::*,
+        batch::*,
+        framebuffer::*,
+        textures::*,
+    },
+    display::{
+        DisplayContainer,
+        Renderable
+    }
+};
 
-pub struct Renderer<'a> {
+pub struct Renderer<'t, 'b> {
+    pub batch: BatchRenderer<'b>,
     pub framebuffer_system: FramebufferSystem,
-    pub batch_system: BatchSystem,
-    pub texture_system: TextureSystem<'a>,
+    pub texture_system: TextureSystem<'t>,
     pub projection_system: ProjectionSystem,
-    pub ctx: WebGlRenderingContext,
+    pub ctx: RefCell<WebGlRenderingContext>,
     window: Window,
     canvas: HtmlCanvasElement,
 }
 
-impl<'a> Renderer<'a> {
-    pub fn from(window: Window) -> Result<Renderer<'a>, JsValue> {
+impl<'t, 'b> Renderer<'t, 'b> {
+    pub fn from(window: Window) -> Result<Renderer<'t, 'b>, JsValue> {
         let canvas = window.document().unwrap().get_element_by_id("canvas").unwrap();
         let canvas: web_sys::HtmlCanvasElement = canvas.dyn_into::<web_sys::HtmlCanvasElement>()?;
 
-        let ctx = canvas
+        let ctx = RefCell::new(canvas
             .get_context("webgl")?
             .unwrap()
-            .dyn_into::<WebGlRenderingContext>()?;
+            .dyn_into::<WebGlRenderingContext>()?);
 
         let mut renderer = Renderer {
+            batch: Default::default(),
             framebuffer_system: Default::default(),
-            batch_system: Default::default(),
             texture_system: Default::default(),
             projection_system: Default::default(),
             window,
@@ -51,7 +56,7 @@ impl<'a> Renderer<'a> {
             ctx,
         };
 
-        let mut attributes: WebGlContextAttributes = renderer.ctx
+        let mut attributes: WebGlContextAttributes = renderer.ctx.get_mut()
             .get_context_attributes()
             .unwrap();
 
@@ -61,7 +66,7 @@ impl<'a> Renderer<'a> {
         // let height = renderer.window.inner_height().unwrap().as_f64().unwrap();
 
         let vert_shader = webgl::compile_shader(
-            &renderer.ctx,
+            &renderer.ctx.get_mut(),
             WebGlRenderingContext::VERTEX_SHADER,
             r#"
             attribute vec4 position;
@@ -71,7 +76,7 @@ impl<'a> Renderer<'a> {
         "#,
         )?;
         let frag_shader = webgl::compile_shader(
-            &renderer.ctx,
+            &renderer.ctx.get_mut(),
             WebGlRenderingContext::FRAGMENT_SHADER,
             r#"
             void main() {
@@ -79,8 +84,8 @@ impl<'a> Renderer<'a> {
             }
         "#,
         )?;
-        let program = webgl::link_program(&renderer.ctx, &vert_shader, &frag_shader)?;
-        renderer.ctx.use_program(Some(&program));
+        let program = webgl::link_program(&renderer.ctx.get_mut(), &vert_shader, &frag_shader)?;
+        renderer.ctx.get_mut().use_program(Some(&program));
 
         
         renderer.clear();
@@ -105,14 +110,19 @@ impl<'a> Renderer<'a> {
         Ok(renderer)
     }
 
-    pub fn render(&mut self, object: &mut dyn display::Renderable, texture: &mut textures::Texture) {
-        // self.renderTextureSystem.bind(texture);
+    /// Render items inside a DisplayContainer.
+    pub fn render<'r>(&'r mut self, object: &'b mut DisplayContainer) {
         // self.batch.currentRenderer.start();
         // Clear canvas before render.
         // self.renderTextureSystem.clear();
         object.render(self);
         // Apply transform.
         // self.batch.currentRenderer.flush();
+    }
+    
+    pub fn render_with_texture<'r>(&'r mut self, object: &'b mut DisplayContainer, texture: &'t mut textures::Texture) {
+        // self.renderTextureSystem.bind(texture);
+        self.render(object);
         texture.base.update();
     }
 
@@ -151,16 +161,16 @@ impl<'a> Renderer<'a> {
 
     /// Clear the frame buffer.
     pub fn clear(&mut self) {
-        self.ctx.clear_color(0.0, 0.0, 0.0, 1.0);
-        self.ctx.clear(WebGlRenderingContext::COLOR_BUFFER_BIT);
+        self.ctx.get_mut().clear_color(0.0, 0.0, 0.0, 1.0);
+        self.ctx.get_mut().clear(WebGlRenderingContext::COLOR_BUFFER_BIT);
     }
 
     /// Resize the WebGL view.
     pub fn resize(&mut self, width: u16, height: u16) { }
 
     fn render_polygon(&mut self, vertices: &[f32], ) -> Result<(), JsValue> {
-        let buffer = self.ctx.create_buffer().ok_or("failed to create buffer")?;
-        self.ctx.bind_buffer(WebGlRenderingContext::ARRAY_BUFFER, Some(&buffer));
+        let buffer = self.ctx.get_mut().create_buffer().ok_or("failed to create buffer")?;
+        self.ctx.get_mut().bind_buffer(WebGlRenderingContext::ARRAY_BUFFER, Some(&buffer));
 
         // Note that `Float32Array::view` is somewhat dangerous (hence the
         // `unsafe`!). This is creating a raw view into our module's
@@ -173,23 +183,23 @@ impl<'a> Renderer<'a> {
         unsafe {
             let vert_array = js_sys::Float32Array::view(&vertices);
 
-            self.ctx.buffer_data_with_array_buffer_view(
+            self.ctx.get_mut().buffer_data_with_array_buffer_view(
                 WebGlRenderingContext::ARRAY_BUFFER,
                 &vert_array,
                 WebGlRenderingContext::STATIC_DRAW,
             );
         }
 
-        self.ctx.vertex_attrib_pointer_with_i32(0, 3, WebGlRenderingContext::FLOAT, false, 0, 0);
-        self.ctx.enable_vertex_attrib_array(0);
+        self.ctx.get_mut().vertex_attrib_pointer_with_i32(0, 3, WebGlRenderingContext::FLOAT, false, 0, 0);
+        self.ctx.get_mut().enable_vertex_attrib_array(0);
 
-        self.ctx.draw_arrays(
+        self.ctx.get_mut().draw_arrays(
             WebGlRenderingContext::LINE_LOOP,
             0,
             (vertices.len() / 3) as i32,
         );
 
-        self.ctx.delete_buffer(Some(&buffer));
+        self.ctx.get_mut().delete_buffer(Some(&buffer));
         
         Ok(())
     }

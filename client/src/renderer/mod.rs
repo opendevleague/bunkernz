@@ -1,4 +1,8 @@
 pub mod core;
 pub mod display;
 
-pub use crate::core::Renderer;
+pub use crate::renderer::{
+    core::Renderer,
+    core::textures::Texture,
+    display::DisplayContainer,
+};

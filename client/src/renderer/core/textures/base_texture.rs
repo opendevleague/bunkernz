@@ -1,12 +1,12 @@
-use crate::core::framebuffer::Framebuffer;
-use crate::core::textures::{
+use crate::renderer::core::framebuffer::Framebuffer;
+use crate::renderer::core::textures::{
     GlTexture,
     Resource
 };
 
+#[derive(Clone)]
 pub struct BaseTexture {
     pub resource: Resource,
-    pub framebuffer: Framebuffer,
     pub width: f32,
     pub height: f32,
     pub resolution: f32,
@@ -21,7 +21,6 @@ impl BaseTexture {
     fn from(resource: Resource, width: f32, height: f32) -> BaseTexture {
         BaseTexture {
             resource,
-            framebuffer: Framebuffer::from(width, height),
             width,
             height,
             resolution: 1.0,

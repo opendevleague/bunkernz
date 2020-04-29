@@ -1,5 +1,6 @@
-use crate::core::textures::BaseTexture;
+use crate::renderer::core::textures::BaseTexture;
 
+#[derive(Clone)]
 pub struct Resource {
     width: u16,
     height: u16,

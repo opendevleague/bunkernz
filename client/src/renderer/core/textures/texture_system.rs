@@ -1,10 +1,10 @@
-use crate::core::textures::Texture;
-use crate::Renderer;
-use crate::core::framebuffer::FramebufferSystem;
+use crate::renderer::core::textures::Texture;
+use crate::renderer::Renderer;
+use crate::renderer::core::framebuffer::FramebufferSystem;
 use engine::*;
 
-pub struct TextureSystem<'a> {
-    pub current_texture:  Option<&'a mut Texture>,
+pub struct TextureSystem<'t> {
+    pub current_texture:  Option<&'t mut Texture>,
     source_frame: types::Rectangle,
     destination_frame: types::Rectangle,
 }
@@ -19,14 +19,14 @@ impl Default for TextureSystem<'_> {
     }
 }
 
-impl<'a> TextureSystem<'a> {
+impl<'t> TextureSystem<'t> {
 
     /// Bind the current texture.
     pub fn bind(
-        &'a mut self,
-        framebuffer_system: &'a mut FramebufferSystem,
-        renderer: &'a mut Renderer<'a>,
-        texture: &'a mut Texture) 
+        &'t mut self,
+        framebuffer_system: &'t mut FramebufferSystem,
+        renderer: &'t mut Renderer<'t, 't>,
+        texture: &'t mut Texture) 
     {
         // Update current texture.
         self.current_texture = Some(texture);

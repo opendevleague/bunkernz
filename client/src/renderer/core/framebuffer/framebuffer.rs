@@ -1,4 +1,4 @@
-use crate::core::framebuffer::GlFramebuffer;
+use crate::renderer::core::framebuffer::GlFramebuffer;
 
 pub struct Framebuffer {
     pub gl: GlFramebuffer,
