@@ -4,12 +4,14 @@ use crate::renderer::core::textures::{
     Resource
 };
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub struct BaseTexture {
     pub resource: Resource,
     pub width: f32,
     pub height: f32,
     pub resolution: f32,
+    pub batch_enabled: u16,
+    pub batch_location: u16,
     dirtyId: u32,
     dityStyleId: u32,
     is_valid: bool,
@@ -24,6 +26,8 @@ impl BaseTexture {
             width,
             height,
             resolution: 1.0,
+            batch_enabled: 0,
+            batch_location: 0,
             dirtyId: 0,
             dityStyleId: 0,
             is_valid: width > 0.0 && height > 0.0,

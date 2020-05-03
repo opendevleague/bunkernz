@@ -1,7 +1,7 @@
 use web_sys::WebGlTexture;
 
 /// Internal struct for WebGL context.
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub struct GlTexture {
     texture: WebGlTexture,
     width: u16,

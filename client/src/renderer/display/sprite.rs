@@ -1,6 +1,16 @@
 use engine::types::*;
 use engine::*;
 use nalgebra::*;
+use js_sys::{
+    ArrayBuffer,
+    Float32Array,
+    Uint32Array,
+    Int8Array,
+    Uint8Array,
+    Int16Array,
+    Uint16Array,
+    Int32Array
+};
 use crate::renderer::display::{
     DisplayContainer,
     Renderable
@@ -17,6 +27,8 @@ pub struct Sprite {
     pub vertex: Vec<f32>,
     pub texture: Box<Texture>,
     pub anchor: nalgebra::Vector2<f32>,
+    pub tint_rgb: u16,
+    pub tint: u16,
 }
 
 impl Renderable for Sprite {
@@ -28,7 +40,7 @@ impl Renderable for Sprite {
         // TODO: Implement mask/filters?
         self.calculate_vertices();
         let batchable = Batchable::Sprite(self);
-        renderer.batch.render(&renderer.ctx, batchable);
+        renderer.batch.render(&renderer.ctx, &renderer.texture_system, batchable);
         // TOOD: Render children.
     }
 }
@@ -41,6 +53,8 @@ impl Sprite {
             texture: Box::new(texture),
             indices: vec![],
             vertex: vec![],
+            tint: 0xFFFFFF,
+            tint_rgb: 0xFFFFFF,
         }
     }
 
