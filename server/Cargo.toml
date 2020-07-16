@@ -1,0 +1,11 @@
+[package]
+name = "bunkernz_server"
+version = "0.0.1"
+authors = ["opendevleague"]
+
+[[bin]]
+name = "bunkernz_server"
+path = "src/main.rs"
+
+[dependencies]
+engine = { path = "../engine", version = "^0" }
