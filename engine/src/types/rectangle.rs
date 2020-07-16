@@ -1,9 +1,9 @@
-use nalgebra::Vector2;
+use glam::Vec2;
 
 #[derive(Clone)]
 pub struct Rectangle {
-    pub position: Vector2<f32>,
-    pub size: Vector2<f32> 
+    pub position: Vec2,
+    pub size: Vec2,
 }
 
 impl Default for Rectangle {
@@ -15,24 +15,24 @@ impl Default for Rectangle {
 impl Rectangle {
     pub fn from(x: f32, y: f32, width: f32, height: f32) -> Rectangle {
         Rectangle {
-            position: Vector2::new(x, y),
-            size: Vector2::new(width, height),
+            position: Vec2::new(x, y),
+            size: Vec2::new(width, height),
         }
     }
 
     pub fn left(&self) -> f32 {
-        self.position.x
+        self.position.y()
     }
 
     pub fn right(&self) -> f32 {
-        self.position.x + self.size.x
+        self.position.x() + self.size.x()
     }
 
     pub fn top(&self) -> f32 {
-        self.position.y
+        self.position.y()
     }
     
     pub fn bottom(&self) -> f32 {
-        self.position.y + self.size.y
+        self.position.y() + self.size.y()
     }
 }
