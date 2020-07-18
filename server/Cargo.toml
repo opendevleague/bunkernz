@@ -2,6 +2,7 @@
 name = "bunkernz_server"
 version = "0.0.1"
 authors = ["opendevleague"]
+edition = "2018"
 
 [[bin]]
 name = "bunkernz_server"
