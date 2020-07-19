@@ -21,7 +21,9 @@ pub fn listen() {
                 }
                 
                 println!("Received message {}", msg.to_text().unwrap());
-                websocket.write_message(msg).unwrap();
+                
+                let newMsg  = tungstenite::Message::Binary(vec![97,97,97,97,97]);
+                websocket.write_message(newMsg).unwrap();
             }
         });
     }
