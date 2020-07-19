@@ -1,4 +1,8 @@
 use oxid::*;
+use std::thread;
+use std::time::Duration;
+
+mod wasm;
 
 fn main() { 
     Window::new("bunkernz", run());
@@ -8,6 +12,9 @@ async fn run() {
     info!("Starting bunkernz client");
     
     loop {
+        wait_seconds(2.).await;
+        wasm::ws_send_str("test message");
+        
         clear_background(BLACK);
 
         draw_text_centred(

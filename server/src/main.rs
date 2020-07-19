@@ -1,3 +1,5 @@
+mod net;
+
 fn main() {
-    println!("Hello, world!");
+    net::ws::listen();
 }

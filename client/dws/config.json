@@ -18,7 +18,10 @@
             "to": "../dist",
             "files": [
                 "index.html",
-                "gl.js"
+                "wasm.js",
+                "gl.js",
+                "sapp.js",
+                "ws.js"
             ]
         }]
     }

@@ -20,7 +20,10 @@
         <canvas id="glcanvas"
                 oncontextmenu="return false;"
                 tabindex="1"></canvas>
+        <script src="./wasm.js"></script>
         <script src="./gl.js"></script>
-        <script>load("./bunkernz_client.wasm");</script>
+        <script src="./sapp.js"></script>
+        <script src="./ws.js"></script>
+        <script>wasm.load("./bunkernz_client.wasm");</script>
     </body>
 </html>
