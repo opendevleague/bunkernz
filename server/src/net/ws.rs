@@ -20,7 +20,8 @@ pub fn listen() {
                     continue;
                 }
                 
-                println!("Received message {}", msg.to_text().unwrap());
+                let bytes = msg.into_data();
+                println!("Received message length {}", bytes.len());
                 
                 let newMsg  = tungstenite::Message::Binary(vec![97,97,97,97,97]);
                 websocket.write_message(newMsg).unwrap();

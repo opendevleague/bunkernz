@@ -1,4 +1,6 @@
-﻿mod update_positions;
+﻿pub mod packets;
+
+mod update_positions;
 pub use update_positions::update_positions;
 pub mod add_player;
 pub use add_player::insert_new_player;

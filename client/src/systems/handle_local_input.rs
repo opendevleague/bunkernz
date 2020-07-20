@@ -4,10 +4,12 @@ use crate::components::*;
 
 pub fn handle_local_input() -> Box<dyn Schedulable> {
     SystemBuilder::new("handle_local_input")
-        .with_query(<(Write<LocalInput>)>::query())
+        .with_query(
+            <(Write<Input>)>::query()
+                .filter(tag::<LocalPlayer>())
+        )
         .build(|_, world, (), query| {
             for (mut input) in query.iter_mut(world) {
-                info!("Modifying input");
                 if is_key_down(KeyCode::Right) {
                     input.0 += 1.;
                 } else if is_key_down(KeyCode::Left) {

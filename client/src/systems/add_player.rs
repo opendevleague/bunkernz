@@ -11,21 +11,24 @@ pub fn add_player() -> Box<fn(&mut World, &mut Resources)> {
             .collect::<Vec<Entity>>()
             .iter()
             .for_each(|entity| {
-                info!("Adding new player");
                 insert_new_player(world);
                 world.delete(*entity);
             });
     })
 }
 
-pub fn insert_new_player(world: &mut World) -> &Entity {
+pub fn insert_new_player(world: &mut World) -> Entity {
+    info!("Adding new player");
     world.insert(
         (),
         vec![(
+            Id(1),
             Pos(0.,0.,0.),
+            Vel(0.,0.,0.),
+            Input(0.,0.),
             RenderCircle {
                 radius: 15.
             }
         )],
-    ).first().unwrap()
+    ).to_vec()[0]
 }
