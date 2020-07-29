@@ -1,7 +1,7 @@
 ﻿use oxid::*;
 use engine::legion::prelude::*;
 use crate::components::packets::*;
-use crate::net::WebSocket;
+use crate::net;
 use crate::components::*;
 
 // TODO: use build scripts.
@@ -31,7 +31,11 @@ pub fn new(packet: PacketType) {
 }
 
 fn write_player_moved(data: (Id, f32, f32)) {
-    WebSocket::send_bytes(&[
+    if !net::is_open() {
+        return;
+    }
+    
+    net::send_bytes(&[
         PacketType::PlayerMoved as u8
     ]);
 }

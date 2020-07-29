@@ -5,11 +5,11 @@ mod net;
 use oxid::*;
 use std::thread;
 use std::time::Duration;
-use net::WebSocket;
 use engine::legion::prelude::*;
 use engine::tracing_subscriber;
 use components::*;
 use crate::components::packets::PacketType;
+use crate::net::INCOMING_QUEUE;
 
 fn main() { 
     Window::new("bunkernz", run());
@@ -17,16 +17,10 @@ fn main() {
 
 async fn run() {
     info!("Starting bunkernz client");
+    let mut last_packet_length: usize = 0;
     
-    // wait_seconds(2.).await;
-    // WebSocket::send_bytes("Hi\0".as_bytes());
-    // WebSocket::send_bytes(&[117, 0x0]);
-    
+    net::initialise();
     wait_seconds(1.).await;
-    
-    WebSocket::init(Box::new(|data: &[u8]| {
-        info!("Received packet length: {}", data.len());
-    }));
     
     let universe = Universe::new();
     let mut world = universe.create_world();
@@ -48,6 +42,23 @@ async fn run() {
     
     loop {
         clear_background(BLACK);
+        
+        // Websocket loop.
+        let data: &[u8] = net::read_stream();
+        last_packet_length = data.len();
+        // Reset queue length.
+        unsafe {
+            net::INCOMING_QUEUE[0] = 0;
+            net::INCOMING_QUEUE[1] = 0;
+        }
+        
+        draw_text_centred(
+            format!("Last packet bytes: {}", last_packet_length).as_str(),
+            100.,
+            screen_height()/2.,
+            32.,
+            WHITE
+        );
         schedule.execute(&mut world, &mut resources);
         next_frame().await;
     }
