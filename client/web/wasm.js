@@ -6,19 +6,33 @@ class Wasm {
         this.plugins = null;
         this.exports = null;
         this.memory = null;
+        this.listeners = {};
     }
     
-    load(path, plugins = null) {
+    on(key, callback) {
+        if (this.listeners[key] == null)
+            this.listeners[key] = [];
+        
+        this.listeners[key].push(callback);
+    }
+    
+    emit(key) {
+        if (this.listeners[key] == null)
+            return;
+        
+        this.listeners[key].forEach((callback) => {
+            callback();
+        });
+    }
+    
+    load(path) {
         this.importObject = {
             env: {...(window.wasmImports ?? {})}
         };
         
         const request = fetch(path);
         
-        this.plugins = plugins;
-        this.registerPlugins(this.plugins);
-
-        if (typeof WebAssembly.instantiateStreaming === 'function') {
+        if (typeof WebAssembly.instantiateStreaming === "function") {
             WebAssembly.instantiateStreaming(request, this.importObject)
                 .then(this.initialiseObject.bind(this));
             return;
@@ -34,33 +48,11 @@ class Wasm {
             .then(this.initialiseObject.bind(this));
     }
     
-    initPlugins(plugins) {
-        if (plugins == null)
-            return;
-
-        plugins.forEach(plugin => {
-            if (plugin.on_init == null)
-                return;
-            plugin.on_init();
-        });
-    }
-
-    registerPlugins(plugins) {
-        if (plugins == null)
-            return;
-
-        plugins.forEach(plugin => {
-            if (plugin.on_init == null)
-                return;
-            plugin.register_plugin(this.importObject);
-        });
-    }
-    
     initialiseObject(object) {
         this.memory = object.instance.exports.memory;
         this.exports = object.instance.exports;
 
-        this.initPlugins(this.plugins);
+        this.emit("load");
         object.instance.exports.main();
     }
     
