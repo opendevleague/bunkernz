@@ -1,5 +1,6 @@
 [![Banner](assets/bunkernz/banner.png)](http://bunker.nz)
 
+[![Github actions](https://github.com/opendevleague/bunkernz/workflows/Build/badge.svg)](https://github.com/opendevleague/bunkernz/actions)
 ![Stage][b1]
 [![License][b2]][l2]
 [![Discord][b3]][l3]
