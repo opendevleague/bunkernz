@@ -6,7 +6,7 @@
 [![Discord][b3]][l3]
 [![Wiki][b4]][l4]
 ![Lines of code][b5]
-![Contributors][b6]
+[![Contributors][b6]](https://github.com/opendevleague/bunkernz/graphs/contributors)
 
 [b1]: https://img.shields.io/badge/stage-pre--alpha-red
 [b2]: https://img.shields.io/badge/License-MIT-green.svg
